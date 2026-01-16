@@ -1,43 +1,39 @@
 workflows:
-  ios-build:
-    name: Device Tuner Pro 26 - iOS Build
-    max_build_duration: 60
+  ios-workflow:
+    name: iOS Build
     environment:
+      xcode: "26.2"
       vars:
         XCODE_PROJECT: CleanerGuru.xcodeproj
         XCODE_SCHEME: CleanerGuru
         APP_STORE_CONNECT_API_KEY_PATH: AuthKey_6V3PP83474.p8
         APP_STORE_CONNECT_KEY_ID: 6V3PP83474
         APP_STORE_CONNECT_ISSUER_ID: 26bb7108-fb21-4a1d-bf89-a194949bc56a
-        TEAM_ID: 2ZFFN6CVB4
     scripts:
+      - name: Install dependencies
+        script: |
+          gem install bundler
+          bundle install
+          pod install
       - name: Increment build number
         script: |
           cd ios
           agvtool next-version -all
-      - name: Resolve dependencies
-        script: |
-          cd ios
-          pod install
       - name: Build IPA
         script: |
-          xcodebuild -workspace "${XCODE_PROJECT%.*}.xcworkspace" \
-            -scheme "$XCODE_SCHEME" \
-            -configuration Release \
-            -sdk iphoneos \
-            -archivePath "$CM_BUILD_DIR/$XCODE_SCHEME.xcarchive" \
-            clean archive \
-            DEVELOPMENT_TEAM=$TEAM_ID \
-            CODE_SIGN_STYLE=Automatic
+          xcodebuild -project $XCODE_PROJECT \
+                     -scheme $XCODE_SCHEME \
+                     -sdk iphoneos \
+                     -configuration Release \
+                     archive \
+                     -archivePath $CM_BUILD_DIR/build/$XCODE_SCHEME.xcarchive
           xcodebuild -exportArchive \
-            -archivePath "$CM_BUILD_DIR/$XCODE_SCHEME.xcarchive" \
-            -exportOptionsPlist "$CM_BUILD_DIR/export_options.plist" \
-            -exportPath "$CM_BUILD_DIR/ipa"
-    artifacts:
-      - "$CM_BUILD_DIR/ipa/*.ipa"
+                     -archivePath $CM_BUILD_DIR/build/$XCODE_SCHEME.xcarchive \
+                     -exportOptionsPlist export_options.plist \
+                     -exportPath $CM_BUILD_DIR/build/ipa
     publishing:
       app_store_connect:
-        api_key_path: "$APP_STORE_CONNECT_API_KEY_PATH"
-        key_id: "$APP_STORE_CONNECT_KEY_ID"
-        issuer_id: "$APP_STORE_CONNECT_ISSUER_ID"
-        ipa_path: "$CM_BUILD_DIR/ipa/DeviceTunerPro26.ipa"
+        api_key_path: $APP_STORE_CONNECT_API_KEY_PATH
+        key_id: $APP_STORE_CONNECT_KEY_ID
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+        ipa_path: $CM_BUILD_DIR/build/ipa/*.ipa
