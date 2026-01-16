@@ -1,8 +1,8 @@
 workflows:
   ios-workflow:
     name: iOS Build
+    max_build_duration: 60
     environment:
-      xcode: "26.2"
       vars:
         XCODE_PROJECT: CleanerGuru.xcodeproj
         XCODE_SCHEME: CleanerGuru
@@ -12,28 +12,30 @@ workflows:
     scripts:
       - name: Install dependencies
         script: |
-          gem install bundler
-          bundle install
+          brew install cocoapods
           pod install
       - name: Increment build number
         script: |
-          cd ios
-          agvtool next-version -all
-      - name: Build IPA
+          /usr/libexec/PlistBuddy -c "Print CFBundleVersion" "CleanerGuru/Info.plist" >/dev/null 2>&1
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $(( $(/usr/libexec/PlistBuddy -c 'Print CFBundleVersion' CleanerGuru/Info.plist) + 1 ))" CleanerGuru/Info.plist
+      - name: Build and archive IPA
         script: |
           xcodebuild -project $XCODE_PROJECT \
                      -scheme $XCODE_SCHEME \
-                     -sdk iphoneos \
                      -configuration Release \
-                     archive \
-                     -archivePath $CM_BUILD_DIR/build/$XCODE_SCHEME.xcarchive
+                     -archivePath build/ios/DeviceTunerPro26.xcarchive \
+                     clean archive \
+                     DEVELOPMENT_TEAM=2ZFFN6CVB4 \
+                     CODE_SIGN_STYLE=Automatic
           xcodebuild -exportArchive \
-                     -archivePath $CM_BUILD_DIR/build/$XCODE_SCHEME.xcarchive \
+                     -archivePath build/ios/DeviceTunerPro26.xcarchive \
                      -exportOptionsPlist export_options.plist \
-                     -exportPath $CM_BUILD_DIR/build/ipa
+                     -exportPath build/ios/ipa
+    artifacts:
+      - build/ios/ipa/*.ipa
     publishing:
       app_store_connect:
         api_key_path: $APP_STORE_CONNECT_API_KEY_PATH
         key_id: $APP_STORE_CONNECT_KEY_ID
         issuer_id: $APP_STORE_CONNECT_ISSUER_ID
-        ipa_path: $CM_BUILD_DIR/build/ipa/*.ipa
+        ipa_path: build/ios/ipa/DeviceTunerPro26.ipa
