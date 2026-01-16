@@ -9,7 +9,7 @@ workflows:
         XCODE_PROJECT: "CleanerGuru.xcodeproj"
         XCODE_SCHEME: "CleanerGuru"
         APPLE_TEAM_ID: "2ZFFN6CVB4"
-        APP_STORE_CONNECT_API_KEY_PATH: "AuthKey_6V3PP83474.p8"
+        APP_STORE_CONNECT_API_KEY: "AuthKey_6V3PP83474.p8"
         APP_STORE_CONNECT_KEY_ID: "6V3PP83474"
         APP_STORE_CONNECT_ISSUER_ID: "26bb7108-fb21-4a1d-bf89-a194949bc56a"
 
