@@ -1,24 +1,31 @@
 workflows:
-  ios-workflow:
-    name: iOS Build
+  ios-build:
+    name: iOS build – Device Tuner PRO 26
+    instance_type: mac_mini_m2
     max_build_duration: 120
+
     environment:
       vars:
-        XCODE_PROJECT: CleanerGuru.xcodeproj
-        XCODE_SCHEME: CleanerGuru
-        APP_STORE_CONNECT_API_KEY_PATH: AuthKey_6V3PP83474.p8
-        APP_STORE_CONNECT_KEY_ID: 6V3PP83474
-        APP_STORE_CONNECT_ISSUER_ID: 26bb7108-fb21-4a1d-bf89-a194949bc56a
-      node: stable
-      cocoapods: default
-      xcode: latest
-      flutter: none
+        XCODE_PROJECT: "CleanerGuru.xcodeproj"
+        XCODE_SCHEME: "CleanerGuru"
+        APPLE_TEAM_ID: "2ZFFN6CVB4"
+        APP_STORE_CONNECT_API_KEY_PATH: "AuthKey_6V3PP83474.p8"
+        APP_STORE_CONNECT_KEY_ID: "6V3PP83474"
+        APP_STORE_CONNECT_ISSUER_ID: "26bb7108-fb21-4a1d-bf89-a194949bc56a"
+
     scripts:
-      - name: Install dependencies
+      - name: Install Fastlane
         script: |
-          gem install fastlane
-          pod install --project-directory=.
-      - name: Build and archive IPA
+          gem install fastlane --no-document
+
+      - name: Increment build number
+        script: |
+          currentBuildNumber=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "Info.plist")
+          newBuildNumber=$((currentBuildNumber + 1))
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $newBuildNumber" "Info.plist"
+          echo "Build number incremented to $newBuildNumber"
+
+      - name: Build IPA
         script: |
           fastlane gym \
             --project "$XCODE_PROJECT" \
@@ -26,12 +33,18 @@ workflows:
             --clean \
             --export_method app-store \
             --output_directory build/ios/ipa \
-            --output_name DeviceTunerPro26 \
-            --xcargs "DEVELOPMENT_TEAM=2ZFFN6CVB4 CODE_SIGN_STYLE=Automatic"
-    artifacts:
-      - build/ios/ipa/*.ipa
+            --output_name DeviceTunerPro26.ipa \
+            --xcargs "DEVELOPMENT_TEAM=$APPLE_TEAM_ID CODE_SIGN_STYLE=Automatic"
+
     publishing:
       app_store_connect:
         api_key_path: $APP_STORE_CONNECT_API_KEY_PATH
         key_id: $APP_STORE_CONNECT_KEY_ID
         issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+        ipa_path: build/ios/ipa/DeviceTunerPro26.ipa
+        skip_metadata: true
+        skip_screenshots: true
+        skip_app_version_update: true
+
+    artifacts:
+      - build/ios/ipa/*.ipa
