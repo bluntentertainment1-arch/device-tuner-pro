@@ -6,7 +6,6 @@ workflows:
 
     environment:
       vars:
-        # Xcode project and scheme
         XCODE_PROJECT: "CleanerGuru.xcodeproj"
         XCODE_SCHEME: "CleanerGuru"
         APP_STORE_CONNECT_API_KEY_PATH: "AuthKey_6V3PP83474.p8"
@@ -14,31 +13,37 @@ workflows:
         APP_STORE_CONNECT_ISSUER_ID: "26bb7108-fb21-4a1d-bf89-a194949bc56a"
 
     scripts:
-      - name: Install CocoaPods
+      - name: Install CocoaPods and Fastlane
         script: |
           cd ios || true
           pod install || true
+          gem install fastlane --no-document
 
-      - name: Increment build number
+      - name: Increment build number and build IPA
         script: |
           cd ios || true
-          # Read current build number from Info.plist
+          # Increment build number
           currentBuildNumber=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "Info.plist")
-          # Increment by 1
           newBuildNumber=$((currentBuildNumber + 1))
-          # Update Info.plist
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $newBuildNumber" "Info.plist"
           echo "Build number incremented: $newBuildNumber"
-
-      - name: Build and archive IPA
-        script: |
-          xcode-project build-ipa             --project "$XCODE_PROJECT"             --scheme "$XCODE_SCHEME"
+          # Build IPA using Fastlane gym
+          fastlane gym \
+            --scheme "CleanerGuru" \
+            --project "CleanerGuru.xcodeproj" \
+            --output_directory "../build/ios/ipa" \
+            --output_name "DeviceTunerPro26.ipa" \
+            --clean
 
       - name: Upload to TestFlight / App Store
         script: |
-          gem install fastlane --no-document
           cd ios || true
-          fastlane deliver             --ipa build/ios/ipa/*.ipa             --skip_metadata true             --skip_screenshots true             --skip_app_version_update true             --api_key_path "$APP_STORE_CONNECT_API_KEY_PATH"
+          fastlane deliver \
+            --ipa "../build/ios/ipa/DeviceTunerPro26.ipa" \
+            --skip_metadata true \
+            --skip_screenshots true \
+            --skip_app_version_update true \
+            --api_key_path "AuthKey_6V3PP83474.p8"
 
     artifacts:
       - build/ios/ipa/*.ipa
