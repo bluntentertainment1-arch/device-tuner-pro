@@ -8,9 +8,13 @@
     <string>2ZFFN6CVB4</string>
     <key>uploadBitcode</key>
     <true/>
+    <key>uploadSymbols</key>
+    <true/>
     <key>compileBitcode</key>
     <true/>
     <key>signingStyle</key>
     <string>automatic</string>
+    <key>thinning</key>
+    <string>&lt;none&gt;</string>
 </dict>
 </plist>
