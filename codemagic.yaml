@@ -8,9 +8,8 @@ workflows:
       vars:
         XCODE_PROJECT: "CleanerGuru.xcodeproj"
         XCODE_SCHEME: "CleanerGuru"
-        APPLE_ID: $APPLE_ID
-        APPLE_TEAM_ID: $APPLE_TEAM_ID
-        APP_NAME: $APP_NAME
+        APPLE_TEAM_ID: "2ZFFN6CVB4"
+        IPA_OUTPUT_NAME: "DeviceTunerPro26.ipa"
 
     scripts:
       - name: Install Fastlane
@@ -19,9 +18,9 @@ workflows:
 
       - name: Increment build number
         script: |
-          currentBuildNumber=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "Sources/Info.plist")
+          currentBuildNumber=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "Info.plist")
           newBuildNumber=$((currentBuildNumber + 1))
-          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $newBuildNumber" "Sources/Info.plist"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $newBuildNumber" "Info.plist"
           echo "Build number incremented to $newBuildNumber"
 
       - name: Build IPA
@@ -32,19 +31,17 @@ workflows:
             --clean \
             --export_method app-store \
             --output_directory build/ios/ipa \
-            --output_name DeviceTunerPro26.ipa \
-            --xcargs "DEVELOPMENT_TEAM=$APPLE_TEAM_ID CODE_SIGN_STYLE=Automatic" \
-            --allowProvisioningUpdates
+            --output_name "$IPA_OUTPUT_NAME" \
+            --xcargs "DEVELOPMENT_TEAM=$APPLE_TEAM_ID CODE_SIGN_STYLE=Automatic"
 
       - name: Upload to TestFlight
         script: |
           fastlane deliver \
-            --ipa "build/ios/ipa/DeviceTunerPro26.ipa" \
+            --ipa "build/ios/ipa/$IPA_OUTPUT_NAME" \
             --skip_metadata true \
             --skip_screenshots true \
-            --username "$APPLE_ID" \
-            --submit_for_review true \
-            --automatic_release false
+            --skip_app_version_update true \
+            --api_key_path "AuthKey_6V3PP83474.p8"
 
     artifacts:
       - build/ios/ipa/*.ipa
