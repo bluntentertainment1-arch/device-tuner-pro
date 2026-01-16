@@ -8,38 +8,36 @@ workflows:
       vars:
         XCODE_PROJECT: "CleanerGuru.xcodeproj"
         XCODE_SCHEME: "CleanerGuru"
+        APPLE_TEAM_ID: "2ZFFN6CVB4"
         APP_STORE_CONNECT_API_KEY_PATH: "AuthKey_6V3PP83474.p8"
-        APP_STORE_CONNECT_KEY_ID: "6V3PP83474"
-        APP_STORE_CONNECT_ISSUER_ID: "26bb7108-fb21-4a1d-bf89-a194949bc56a"
 
     scripts:
-      - name: Install CocoaPods and Fastlane
+      - name: Install Fastlane
         script: |
-          cd ios || true
-          pod install || true
           gem install fastlane --no-document
 
-      - name: Increment build number and build IPA
+      - name: Increment build number
         script: |
-          cd ios || true
-          # Increment build number
           currentBuildNumber=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "Info.plist")
           newBuildNumber=$((currentBuildNumber + 1))
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $newBuildNumber" "Info.plist"
-          echo "Build number incremented: $newBuildNumber"
-          # Build IPA using Fastlane gym
-          fastlane gym \
-            --scheme "CleanerGuru" \
-            --project "CleanerGuru.xcodeproj" \
-            --output_directory "../build/ios/ipa" \
-            --output_name "DeviceTunerPro26.ipa" \
-            --clean
+          echo "Build number incremented to $newBuildNumber"
 
-      - name: Upload to TestFlight / App Store
+      - name: Build IPA
         script: |
-          cd ios || true
+          fastlane gym \
+            --project "CleanerGuru.xcodeproj" \
+            --scheme "CleanerGuru" \
+            --clean \
+            --export_method app-store \
+            --output_directory build/ios/ipa \
+            --output_name DeviceTunerPro26.ipa \
+            --xcargs "DEVELOPMENT_TEAM=2ZFFN6CVB4 CODE_SIGN_STYLE=Automatic"
+
+      - name: Upload to TestFlight
+        script: |
           fastlane deliver \
-            --ipa "../build/ios/ipa/DeviceTunerPro26.ipa" \
+            --ipa "build/ios/ipa/DeviceTunerPro26.ipa" \
             --skip_metadata true \
             --skip_screenshots true \
             --skip_app_version_update true \
