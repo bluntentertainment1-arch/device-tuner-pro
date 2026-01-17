@@ -5,10 +5,10 @@ workflows:
     max_build_duration: 120
 
     environment:
-      xcode: latest
       vars:
         XCODE_PROJECT: "CleanerGuru.xcodeproj"
         XCODE_SCHEME: "CleanerGuru"
+        APPLE_TEAM_ID: "2ZFFN6CVB4"
 
     scripts:
       - name: Install Fastlane
@@ -16,37 +16,32 @@ workflows:
           gem install fastlane --no-document
 
       - name: Increment build number
-  script: |
-    PLIST_PATH="Sources/Info.plist"
+        script: |
+          PLIST_PATH="Sources/Info.plist"
 
-    echo "Using Info.plist at: $PLIST_PATH"
+          echo "Using Info.plist at: $PLIST_PATH"
 
-    /usr/libexec/PlistBuddy -c "Print CFBundleVersion" "$PLIST_PATH" || \
-    /usr/libexec/PlistBuddy -c "Add :CFBundleVersion string 1" "$PLIST_PATH"
+          /usr/libexec/PlistBuddy -c "Print CFBundleVersion" "$PLIST_PATH" || \
+          /usr/libexec/PlistBuddy -c "Add :CFBundleVersion string 1" "$PLIST_PATH"
 
-    currentBuildNumber=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "$PLIST_PATH")
-    newBuildNumber=$((currentBuildNumber + 1))
+          currentBuildNumber=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "$PLIST_PATH")
+          newBuildNumber=$((currentBuildNumber + 1))
 
-    /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $newBuildNumber" "$PLIST_PATH"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $newBuildNumber" "$PLIST_PATH"
 
-    echo "Build number incremented to $newBuildNumber"
+          echo "Build number incremented to $newBuildNumber"
 
       - name: Build & Sign IPA (Automatic Signing)
         script: |
-          xcodebuild \
-            -project "$XCODE_PROJECT" \
-            -scheme "$XCODE_SCHEME" \
-            -configuration Release \
-            -archivePath build/CleanerGuru.xcarchive \
-            archive \
-            -allowProvisioningUpdates
-
-          xcodebuild \
-            -exportArchive \
-            -archivePath build/CleanerGuru.xcarchive \
-            -exportPath build/ipa \
-            -exportOptionsPlist /usr/libexec/PlistBuddy \
-            -allowProvisioningUpdates
+          fastlane gym \
+            --project "$XCODE_PROJECT" \
+            --scheme "$XCODE_SCHEME" \
+            --clean \
+            --export_method app-store \
+            --output_directory build/ios/ipa \
+            --output_name DeviceTunerPro26.ipa \
+            --xcargs "DEVELOPMENT_TEAM=$APPLE_TEAM_ID CODE_SIGN_STYLE=Automatic" \
+            --allowProvisioningUpdates
 
     artifacts:
-      - build/ipa/*.ipa
+      - build/ios/ipa/*.ipa
