@@ -10,7 +10,7 @@ workflows:
         XCODE_SCHEME: "CleanerGuru"
         APPLE_TEAM_ID: "2ZFFN6CVB4"       # Your Apple Team ID
         CERTIFICATE_FILE: "ios_distribution.p12"
-        CERTIFICATE_PASSWORD: ""            # Leave empty if none
+        CERTIFICATE_PASSWORD: "123456"            # Leave empty if none
         MOBILEPROVISION_FILE: "ios.mobileprovision"
 
     scripts:
