@@ -16,8 +16,20 @@ workflows:
           gem install fastlane --no-document
 
       - name: Increment build number
-        script: |
-          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $(date +%s)" CleanerGuru/Info.plist
+  script: |
+    PLIST_PATH="Sources/Info.plist"
+
+    echo "Using Info.plist at: $PLIST_PATH"
+
+    /usr/libexec/PlistBuddy -c "Print CFBundleVersion" "$PLIST_PATH" || \
+    /usr/libexec/PlistBuddy -c "Add :CFBundleVersion string 1" "$PLIST_PATH"
+
+    currentBuildNumber=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "$PLIST_PATH")
+    newBuildNumber=$((currentBuildNumber + 1))
+
+    /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $newBuildNumber" "$PLIST_PATH"
+
+    echo "Build number incremented to $newBuildNumber"
 
       - name: Build & Sign IPA (Automatic Signing)
         script: |
