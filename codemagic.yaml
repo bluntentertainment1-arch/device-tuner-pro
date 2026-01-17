@@ -9,9 +9,9 @@ workflows:
         XCODE_PROJECT: "CleanerGuru.xcodeproj"
         XCODE_SCHEME: "CleanerGuru"
         APPLE_TEAM_ID: "2ZFFN6CVB4"
-        IOS_CERTIFICATE: "ios_distribution.p12"
-        IOS_CERTIFICATE_PASSWORD: "123456"
-        IOS_PROVISIONING_PROFILE: "ios.mobileprovision"
+        IOS_P12_PATH: "ios_distribution.p12"
+        IOS_P12_PASSWORD: "123456"
+        MOBILEPROVISION_PATH: "ios.mobileprovision"
 
     scripts:
       - name: Install Fastlane
@@ -32,10 +32,10 @@ workflows:
             --scheme "$XCODE_SCHEME" \
             --clean \
             --export_method app-store \
-            --export_options "./exportOptions.plist" \
+            --export_options "exportOptions.plist" \
             --output_directory build/ios/ipa \
             --output_name DeviceTunerPro26.ipa \
-            --xcargs "CODE_SIGN_IDENTITY='iPhone Distribution' DEVELOPMENT_TEAM=$APPLE_TEAM_ID PROVISIONING_PROFILE_SPECIFIER=ios"
+            --xcargs "DEVELOPMENT_TEAM=$APPLE_TEAM_ID CODE_SIGN_STYLE=Automatic"
 
     artifacts:
       - build/ios/ipa/*.ipa
