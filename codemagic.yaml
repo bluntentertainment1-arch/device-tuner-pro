@@ -6,10 +6,23 @@ workflows:
 
     environment:
       vars:
+        # Only the required variables
         XCODE_PROJECT: CleanerGuru.xcodeproj
         XCODE_SCHEME: CleanerGuru
 
     scripts:
+      - name: Install Fastlane
+        script: |
+          gem install fastlane --no-document
+
+      - name: Increment build number
+        script: |
+          /usr/libexec/PlistBuddy -c "Print CFBundleVersion" "Info.plist" || echo "0" > tmp_build
+          currentBuildNumber=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "Info.plist" 2>/dev/null || echo 0)
+          newBuildNumber=$((currentBuildNumber + 1))
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $newBuildNumber" "Info.plist"
+          echo "Build number incremented to $newBuildNumber"
+
       - name: Build IPA
         script: |
           xcodebuild archive \
