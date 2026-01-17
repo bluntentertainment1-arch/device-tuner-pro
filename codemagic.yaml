@@ -9,27 +9,28 @@ workflows:
         XCODE_PROJECT: "CleanerGuru.xcodeproj"
         XCODE_SCHEME: "CleanerGuru"
         APPLE_TEAM_ID: "2ZFFN6CVB4"
+        CERTIFICATE_PATH: "ios_distribution.p12"
+        CERTIFICATE_PASSWORD: "123456"
+        PROVISIONING_PROFILE_PATH: "ios.mobileprovision"
+        APP_STORE_CONNECT_API_KEY_PATH: "AuthKey_6V3PP83474.p8"
 
     scripts:
       - name: Install Fastlane
         script: |
           gem install fastlane --no-document
 
+      - name: Import Certificate
+        script: |
+          security import "$CERTIFICATE_PATH" -P "$CERTIFICATE_PASSWORD" -A
+
       - name: Increment build number
         script: |
-          PLIST_PATH="Sources/Info.plist"
-
-          /usr/libexec/PlistBuddy -c "Print CFBundleVersion" "$PLIST_PATH" || \
-          /usr/libexec/PlistBuddy -c "Add :CFBundleVersion string 1" "$PLIST_PATH"
-
-          currentBuildNumber=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "$PLIST_PATH")
+          currentBuildNumber=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "sources/Info.plist")
           newBuildNumber=$((currentBuildNumber + 1))
-
-          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $newBuildNumber" "$PLIST_PATH"
-
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $newBuildNumber" "sources/Info.plist"
           echo "Build number incremented to $newBuildNumber"
 
-      - name: Build & Sign IPA (Automatic Signing)
+      - name: Build & Sign IPA
         script: |
           fastlane gym \
             --project "$XCODE_PROJECT" \
@@ -38,7 +39,8 @@ workflows:
             --export_method app-store \
             --output_directory build/ios/ipa \
             --output_name DeviceTunerPro26.ipa \
-            --xcargs "DEVELOPMENT_TEAM=$APPLE_TEAM_ID CODE_SIGN_STYLE=Automatic -allowProvisioningUpdates"
+            --export_options "./exportOptions.plist" \
+            --xcargs "DEVELOPMENT_TEAM=$APPLE_TEAM_ID CODE_SIGN_STYLE=Manual PROVISIONING_PROFILE_SPECIFIER=$(basename $PROVISIONING_PROFILE_PATH .mobileprovision)"
 
     artifacts:
       - build/ios/ipa/*.ipa
