@@ -1,6 +1,6 @@
 workflows:
   ios-build:
-    name: iOS Build – CleanerGuru
+    name: iOS build – Device Tuner PRO 26
     instance_type: mac_mini_m2
     max_build_duration: 120
 
@@ -10,25 +10,23 @@ workflows:
         XCODE_SCHEME: CleanerGuru
 
     scripts:
-      - name: Archive app
+      - name: Build IPA
         script: |
-          xcodebuild \
+          xcodebuild archive \
             -project "$XCODE_PROJECT" \
             -scheme "$XCODE_SCHEME" \
-            -configuration Release \
             -archivePath build/CleanerGuru.xcarchive \
-            clean archive
+            -destination 'generic/platform=iOS' \
+            -allowProvisioningUpdates
 
-      - name: Export IPA
-        script: |
           xcodebuild -exportArchive \
             -archivePath build/CleanerGuru.xcarchive \
             -exportOptionsPlist exportOptions.plist \
-            -exportPath build/ios/ipa
+            -exportPath build/ipa
 
     artifacts:
-      - build/ios/ipa/*.ipa
+      - build/ipa/*.ipa
 
     publishing:
       app_store_connect:
-        submit_to_testflight: true
+        use_integration: true
