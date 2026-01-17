@@ -1,6 +1,6 @@
 workflows:
   ios-build:
-    name: iOS Build & Sign – Device Tuner PRO 26
+    name: iOS build – Device Tuner PRO 26
     instance_type: mac_mini_m2
     max_build_duration: 120
 
@@ -8,10 +8,10 @@ workflows:
       vars:
         XCODE_PROJECT: "CleanerGuru.xcodeproj"
         XCODE_SCHEME: "CleanerGuru"
-        APPLE_TEAM_ID: "2ZFFN6CVB4"       # Your Apple Team ID
-        CERTIFICATE_FILE: "ios_distribution.p12"
-        CERTIFICATE_PASSWORD: "123456"            # Leave empty if none
-        MOBILEPROVISION_FILE: "ios.mobileprovision"
+        APPLE_TEAM_ID: "2ZFFN6CVB4"
+        IOS_CERTIFICATE: "ios_distribution.p12"
+        IOS_CERTIFICATE_PASSWORD: "123456"
+        IOS_PROVISIONING_PROFILE: "ios.mobileprovision"
 
     scripts:
       - name: Install Fastlane
@@ -32,10 +32,10 @@ workflows:
             --scheme "$XCODE_SCHEME" \
             --clean \
             --export_method app-store \
+            --export_options "./exportOptions.plist" \
             --output_directory build/ios/ipa \
             --output_name DeviceTunerPro26.ipa \
-            --export_options "exportOptions.plist" \
-            --xcargs "DEVELOPMENT_TEAM=$APPLE_TEAM_ID CODE_SIGN_STYLE=Manual"
+            --xcargs "CODE_SIGN_IDENTITY='iPhone Distribution' DEVELOPMENT_TEAM=$APPLE_TEAM_ID PROVISIONING_PROFILE_SPECIFIER=ios"
 
     artifacts:
       - build/ios/ipa/*.ipa
