@@ -9,7 +9,7 @@ workflows:
         XCODE_PROJECT: "CleanerGuru.xcodeproj"
         XCODE_SCHEME: "CleanerGuru"
         APPLE_TEAM_ID: "2ZFFN6CVB4"
-        CERTIFICATE_PATH: "ios_distribution.p12"
+        CERTIFICATE_PATH: "ios_distribution"
         CERTIFICATE_PASSWORD: "123456"
         PROVISIONING_PROFILE: "ios.mobileprovision"
 
