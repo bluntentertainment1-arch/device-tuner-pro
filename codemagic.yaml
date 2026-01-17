@@ -19,8 +19,6 @@ workflows:
         script: |
           PLIST_PATH="Sources/Info.plist"
 
-          echo "Using Info.plist at: $PLIST_PATH"
-
           /usr/libexec/PlistBuddy -c "Print CFBundleVersion" "$PLIST_PATH" || \
           /usr/libexec/PlistBuddy -c "Add :CFBundleVersion string 1" "$PLIST_PATH"
 
@@ -40,8 +38,7 @@ workflows:
             --export_method app-store \
             --output_directory build/ios/ipa \
             --output_name DeviceTunerPro26.ipa \
-            --xcargs "DEVELOPMENT_TEAM=$APPLE_TEAM_ID CODE_SIGN_STYLE=Automatic" \
-            --allowProvisioningUpdates
+            --xcargs "DEVELOPMENT_TEAM=$APPLE_TEAM_ID CODE_SIGN_STYLE=Automatic -allowProvisioningUpdates"
 
     artifacts:
       - build/ios/ipa/*.ipa
