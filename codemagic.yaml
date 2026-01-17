@@ -1,6 +1,6 @@
 workflows:
   ios-build:
-    name: iOS Build & Sign – CleanerGuru
+    name: iOS Build & Sign – Device Tuner PRO 26
     instance_type: mac_mini_m2
     max_build_duration: 120
 
@@ -8,9 +8,9 @@ workflows:
       vars:
         XCODE_PROJECT: "CleanerGuru.xcodeproj"
         XCODE_SCHEME: "CleanerGuru"
-        APPLE_TEAM_ID: "<YOUR_TEAM_ID>"   # Replace with your Apple Team ID
+        APPLE_TEAM_ID: "2ZFFN6CVB4"       # Your Apple Team ID
         CERTIFICATE_FILE: "ios_distribution.p12"
-        CERTIFICATE_PASSWORD: "<YOUR_P12_PASSWORD>"  # Leave empty if none
+        CERTIFICATE_PASSWORD: ""            # Leave empty if none
         MOBILEPROVISION_FILE: "ios.mobileprovision"
 
     scripts:
@@ -34,9 +34,7 @@ workflows:
             --export_method app-store \
             --output_directory build/ios/ipa \
             --output_name DeviceTunerPro26.ipa \
-            --export_options "export_options.plist" \
-            --codesigning_identity "$CERTIFICATE_FILE" \
-            --provisioning_profile "$MOBILEPROVISION_FILE" \
+            --export_options "exportOptions.plist" \
             --xcargs "DEVELOPMENT_TEAM=$APPLE_TEAM_ID CODE_SIGN_STYLE=Manual"
 
     artifacts:
