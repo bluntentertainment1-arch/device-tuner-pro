@@ -5,44 +5,36 @@ workflows:
     max_build_duration: 120
 
     environment:
+      xcode: latest
       vars:
         XCODE_PROJECT: "CleanerGuru.xcodeproj"
         XCODE_SCHEME: "CleanerGuru"
-        APPLE_TEAM_ID: "2ZFFN6CVB4"
-        CERTIFICATE_PATH: "ios_distribution"
-        CERTIFICATE_PASSWORD: "123456"
-        PROVISIONING_PROFILE: "ios.mobileprovision"
 
     scripts:
       - name: Install Fastlane
         script: |
           gem install fastlane --no-document
 
-      - name: Import Certificate
-        script: |
-          security import "$CERTIFICATE_PATH" -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
-
       - name: Increment build number
         script: |
-          /usr/libexec/PlistBuddy -c "Print CFBundleVersion" "Info.plist"
-          currentBuildNumber=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "Info.plist")
-          newBuildNumber=$((currentBuildNumber + 1))
-          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $newBuildNumber" "Info.plist"
-          echo "Build number incremented to $newBuildNumber"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $(date +%s)" CleanerGuru/Info.plist
 
-      - name: Build & Sign IPA
+      - name: Build & Sign IPA (Automatic Signing)
         script: |
-          fastlane gym \
-            --project "$XCODE_PROJECT" \
-            --scheme "$XCODE_SCHEME" \
-            --clean \
-            --export_method app-store \
-            --output_directory build/ios/ipa \
-            --output_name DeviceTunerPro26.ipa \
-            --xcargs "CODE_SIGN_STYLE=Manual \
-                      CODE_SIGN_IDENTITY='iPhone Distribution' \
-                      PROVISIONING_PROFILE_SPECIFIER=$PROVISIONING_PROFILE \
-                      DEVELOPMENT_TEAM=$APPLE_TEAM_ID"
+          xcodebuild \
+            -project "$XCODE_PROJECT" \
+            -scheme "$XCODE_SCHEME" \
+            -configuration Release \
+            -archivePath build/CleanerGuru.xcarchive \
+            archive \
+            -allowProvisioningUpdates
+
+          xcodebuild \
+            -exportArchive \
+            -archivePath build/CleanerGuru.xcarchive \
+            -exportPath build/ipa \
+            -exportOptionsPlist /usr/libexec/PlistBuddy \
+            -allowProvisioningUpdates
 
     artifacts:
-      - build/ios/ipa/*.ipa
+      - build/ipa/*.ipa
