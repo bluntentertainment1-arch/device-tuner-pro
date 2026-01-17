@@ -3,25 +3,18 @@
 <plist version="1.0">
 <dict>
     <key>compileBitcode</key>
-    <false/>
+    <true/>
     <key>destination</key>
     <string>export</string>
     <key>method</key>
     <string>app-store</string>
-    <key>signingCertificate</key>
-    <string>iPhone Distribution</string>
     <key>signingStyle</key>
-    <string>manual</string>
+    <string>automatic</string>
     <key>stripSwiftSymbols</key>
     <true/>
     <key>teamID</key>
     <string>2ZFFN6CVB4</string>
     <key>thinning</key>
     <string>&lt;none&gt;</string>
-    <key>provisioningProfiles</key>
-    <dict>
-        <key>com.kidblunt.cleanerguru</key>
-        <string>ios</string>
-    </dict>
 </dict>
 </plist>
