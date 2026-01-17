@@ -9,48 +9,66 @@ workflows:
         XCODE_PROJECT: "CleanerGuru.xcodeproj"
         XCODE_SCHEME: "CleanerGuru"
         APPLE_TEAM_ID: "2ZFFN6CVB4"
-        PROVISIONING_PROFILE_SPECIFIER: "ios"
-        EXPORT_OPTIONS_PLIST: "./exportOptions.plist"
-        CERTIFICATE_PATH: "./ios_distribution.p12"
-        CERTIFICATE_PASSWORD: "123456"
+        P12_PATH: "ios_distribution.p12"
+        P12_PASSWORD: "123456"
+        MOBILEPROVISION_PATH: "ios.mobileprovision"
+        OUTPUT_IPA_NAME: "DeviceTunerPro26.ipa"
 
     scripts:
       - name: Install Fastlane
         script: |
           gem install fastlane --no-document
 
+      - name: Import Certificate
+        script: |
+          security create-keychain -p travis build.keychain
+          security import "$P12_PATH" -k build.keychain -P "$P12_PASSWORD" -T /usr/bin/codesign
+          security list-keychains -s build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p travis build.keychain
+
       - name: Increment build number
         script: |
-          PLIST_PATH="./sources/Info.plist"
-          if [ -f "$PLIST_PATH" ]; then
-            currentBuildNumber=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "$PLIST_PATH")
-            newBuildNumber=$((currentBuildNumber + 1))
-            /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $newBuildNumber" "$PLIST_PATH"
-            echo "Build number incremented to $newBuildNumber"
-          else
-            echo "Info.plist not found at $PLIST_PATH"
-            exit 1
-          fi
-
-      - name: Import certificate
-        script: |
-          security create-keychain -p "" build.keychain
-          security import "$CERTIFICATE_PATH" -P "$CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k build.keychain
-          security list-keychains -s build.keychain
-          security unlock-keychain -p "" build.keychain
-          security set-keychain-settings -t 3600 -u build.keychain
+          currentBuildNumber=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "Sources/Info.plist" || echo 0)
+          newBuildNumber=$((currentBuildNumber + 1))
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $newBuildNumber" "Sources/Info.plist"
+          echo "Build number incremented to $newBuildNumber"
 
       - name: Build & Sign IPA
         script: |
+          # Generate export options plist for manual signing
+          cat > exportOptions.plist <<EOL
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" 
+           "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>compileBitcode</key>
+              <true/>
+              <key>method</key>
+              <string>app-store</string>
+              <key>signingStyle</key>
+              <string>manual</string>
+              <key>signingCertificate</key>
+              <string>iPhone Distribution</string>
+              <key>provisioningProfiles</key>
+              <dict>
+                  <key>com.kidblunt.cleanerguru</key>
+                  <string>ios</string>
+              </dict>
+          </dict>
+          </plist>
+          EOL
+
+          # Build IPA
           fastlane gym \
             --project "$XCODE_PROJECT" \
             --scheme "$XCODE_SCHEME" \
             --clean \
-            --export_method app-store \
             --output_directory build/ios/ipa \
-            --output_name DeviceTunerPro26.ipa \
-            --export_options "$EXPORT_OPTIONS_PLIST" \
-            --xcargs "DEVELOPMENT_TEAM=$APPLE_TEAM_ID PROVISIONING_PROFILE_SPECIFIER=$PROVISIONING_PROFILE_SPECIFIER CODE_SIGN_STYLE=Manual"
+            --output_name "$OUTPUT_IPA_NAME" \
+            --export_options exportOptions.plist \
+            --xcargs "DEVELOPMENT_TEAM=$APPLE_TEAM_ID PROVISIONING_PROFILE_SPECIFIER=ios CODE_SIGN_STYLE=Manual"
 
     artifacts:
       - build/ios/ipa/*.ipa
