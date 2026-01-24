@@ -1,0 +1,463 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		07944AAF9C7527FAF65EC62B /* DuplicateFileScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502F4AC59BCCDCF2AB101E9A /* DuplicateFileScannerView.swift */; };
+		08484E6F8BCC430E3B16CC2A /* HowToUseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 191942C2AF450B72538C06AE /* HowToUseView.swift */; };
+		18AC47CEBB2221BD1C93093E /* StorageDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51674AB8B582F00B8FEC3EB7 /* StorageDetailView.swift */; };
+		1C03944AE53F35CC61F851B1 /* PhotoLibraryCleanupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55FE38E1E4FA45297F6B48B9 /* PhotoLibraryCleanupView.swift */; };
+		21114215B8D77737A64A4F38 /* SystemCacheCleanerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230A4129A5F2D354E05296D6 /* SystemCacheCleanerView.swift */; };
+		3D894AE5A2B599EEFFB18B71 /* WorldMapPatternView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A546F1BE79663F806DBCB4 /* WorldMapPatternView.swift */; };
+		58D4171C54B4D955D9141934 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4CD84908C1766922F8FF90 /* AboutView.swift */; };
+		5A9C3BA224F9C625CCD00251 /* GamingPerformanceModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 932A3C1CA2576089506467F0 /* GamingPerformanceModeView.swift */; };
+		5D408EB5687D7672D41C771F /* Pods_CleanerGuru.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F4E38184BE4DF92FE018E34 /* Pods_CleanerGuru.framework */; };
+		7012FAEFDACBA1E1922A10E6 /* WalkthroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64271303E12AEA926059EF1 /* WalkthroughView.swift */; };
+		753B84B62DC01C3CCAF53B7F /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FAB6A47B47BD16BE509D921 /* AppConstants.swift */; };
+		A9506D397509DF8F30B7B8BC /* AppLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517CCBA944F0F4D3BA343788 /* AppLogger.swift */; };
+		A95C361FF93128CE901B5F68 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0F62EB60DD988BB7BEDA6EC0 /* Assets.xcassets */; };
+		A9B10AE31ED8459CAEBD87D6 /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2B48A416FFFBB88CB590ED /* SplashScreenView.swift */; };
+		B8F277DCE41640456E4EC2C3 /* BatterySaverModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7714BBD772019703B72AAC6E /* BatterySaverModeView.swift */; };
+		B98240A09A68EC51D45E2830 /* GlowingCardModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AB4A87952C513DDA212F51 /* GlowingCardModifier.swift */; };
+		BB5349ACB9531AB81E6A83BA /* SparklingStarsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD940C0BC2750369B186238 /* SparklingStarsView.swift */; };
+		C0B34CC7BF3D4C2DF8AE5FBC /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFD46759D864D9C28107A47 /* SettingsView.swift */; };
+		E14F795162543422ED934B76 /* CleanerGuruApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3089FB4355794AEDC3C53278 /* CleanerGuruApp.swift */; };
+		E4B9D685CCE5B79555645171 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EAB40A0D5E51A5823B0C85A /* ThemeManager.swift */; };
+		E6092C5CEDB8DF58CFDB77D8 /* MainDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BE6C6636DB8AF492500713 /* MainDashboardView.swift */; };
+		F97548ABAF19BC84FAB2F287 /* DuplicatePhotoScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94C4F23A2170F72B7A8ED2C /* DuplicatePhotoScannerView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0F62EB60DD988BB7BEDA6EC0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		191942C2AF450B72538C06AE /* HowToUseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HowToUseView.swift; path = Sources/HowToUseView.swift; sourceTree = SOURCE_ROOT; };
+		1BFD46759D864D9C28107A47 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SettingsView.swift; path = Sources/SettingsView.swift; sourceTree = SOURCE_ROOT; };
+		1DD940C0BC2750369B186238 /* SparklingStarsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SparklingStarsView.swift; path = Sources/SparklingStarsView.swift; sourceTree = SOURCE_ROOT; };
+		230A4129A5F2D354E05296D6 /* SystemCacheCleanerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SystemCacheCleanerView.swift; path = Sources/SystemCacheCleanerView.swift; sourceTree = SOURCE_ROOT; };
+		239949980CBD2DA904B20426 /* Pods-CleanerGuru.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CleanerGuru.release.xcconfig"; path = "Target Support Files/Pods-CleanerGuru/Pods-CleanerGuru.release.xcconfig"; sourceTree = "<group>"; };
+		265892DE1798C8FF92ADB741 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		3089FB4355794AEDC3C53278 /* CleanerGuruApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanerGuruApp.swift; sourceTree = "<group>"; };
+		3EAB40A0D5E51A5823B0C85A /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
+		502F4AC59BCCDCF2AB101E9A /* DuplicateFileScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DuplicateFileScannerView.swift; path = Sources/DuplicateFileScannerView.swift; sourceTree = SOURCE_ROOT; };
+		51674AB8B582F00B8FEC3EB7 /* StorageDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = StorageDetailView.swift; path = Sources/StorageDetailView.swift; sourceTree = SOURCE_ROOT; };
+		517CCBA944F0F4D3BA343788 /* AppLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLogger.swift; sourceTree = "<group>"; };
+		55FE38E1E4FA45297F6B48B9 /* PhotoLibraryCleanupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibraryCleanupView.swift; sourceTree = "<group>"; };
+		5EBB0A085BB684BAF854BD5A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		5F4E38184BE4DF92FE018E34 /* Pods_CleanerGuru.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CleanerGuru.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6A4CD84908C1766922F8FF90 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		7714BBD772019703B72AAC6E /* BatterySaverModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatterySaverModeView.swift; sourceTree = "<group>"; };
+		7FAB6A47B47BD16BE509D921 /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
+		8143DEFCF337AD6587B5C933 /* CleanerGuru.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = CleanerGuru.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		86AB4A87952C513DDA212F51 /* GlowingCardModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GlowingCardModifier.swift; path = Sources/GlowingCardModifier.swift; sourceTree = SOURCE_ROOT; };
+		87BE6C6636DB8AF492500713 /* MainDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainDashboardView.swift; sourceTree = "<group>"; };
+		932A3C1CA2576089506467F0 /* GamingPerformanceModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamingPerformanceModeView.swift; sourceTree = "<group>"; };
+		9B5B01BC1291D785796C0F52 /* Pods-CleanerGuru.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CleanerGuru.debug.xcconfig"; path = "Target Support Files/Pods-CleanerGuru/Pods-CleanerGuru.debug.xcconfig"; sourceTree = "<group>"; };
+		B5A546F1BE79663F806DBCB4 /* WorldMapPatternView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WorldMapPatternView.swift; path = Sources/WorldMapPatternView.swift; sourceTree = SOURCE_ROOT; };
+		CE2B48A416FFFBB88CB590ED /* SplashScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
+		E64271303E12AEA926059EF1 /* WalkthroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughView.swift; sourceTree = "<group>"; };
+		F94C4F23A2170F72B7A8ED2C /* DuplicatePhotoScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DuplicatePhotoScannerView.swift; path = Sources/DuplicatePhotoScannerView.swift; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4800320484553CBF717EA2A5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5D408EB5687D7672D41C771F /* Pods_CleanerGuru.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		07A42FD8C93731CFB2340BE4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5F4E38184BE4DF92FE018E34 /* Pods_CleanerGuru.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		1FB3960D182E990A18024376 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8143DEFCF337AD6587B5C933 /* CleanerGuru.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4F826E016603D4D8D6F0B79F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				9B5B01BC1291D785796C0F52 /* Pods-CleanerGuru.debug.xcconfig */,
+				239949980CBD2DA904B20426 /* Pods-CleanerGuru.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		5CF1836003F1037D779CBAFB = {
+			isa = PBXGroup;
+			children = (
+				0F62EB60DD988BB7BEDA6EC0 /* Assets.xcassets */,
+				9B3F7F2D488DBFADDCF2C4F3 /* Resources */,
+				DDEB87D7E71D847A58DC4214 /* Sources */,
+				1FB3960D182E990A18024376 /* Products */,
+				4F826E016603D4D8D6F0B79F /* Pods */,
+				07A42FD8C93731CFB2340BE4 /* Frameworks */,
+			);
+			indentWidth = 2;
+			sourceTree = "<group>";
+			tabWidth = 2;
+			usesTabs = 0;
+		};
+		9B3F7F2D488DBFADDCF2C4F3 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				5EBB0A085BB684BAF854BD5A /* PrivacyInfo.xcprivacy */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		DDEB87D7E71D847A58DC4214 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				6A4CD84908C1766922F8FF90 /* AboutView.swift */,
+				7FAB6A47B47BD16BE509D921 /* AppConstants.swift */,
+				517CCBA944F0F4D3BA343788 /* AppLogger.swift */,
+				7714BBD772019703B72AAC6E /* BatterySaverModeView.swift */,
+				3089FB4355794AEDC3C53278 /* CleanerGuruApp.swift */,
+				932A3C1CA2576089506467F0 /* GamingPerformanceModeView.swift */,
+				265892DE1798C8FF92ADB741 /* Info.plist */,
+				87BE6C6636DB8AF492500713 /* MainDashboardView.swift */,
+				55FE38E1E4FA45297F6B48B9 /* PhotoLibraryCleanupView.swift */,
+				CE2B48A416FFFBB88CB590ED /* SplashScreenView.swift */,
+				3EAB40A0D5E51A5823B0C85A /* ThemeManager.swift */,
+				E64271303E12AEA926059EF1 /* WalkthroughView.swift */,
+				F94C4F23A2170F72B7A8ED2C /* DuplicatePhotoScannerView.swift */,
+				502F4AC59BCCDCF2AB101E9A /* DuplicateFileScannerView.swift */,
+				230A4129A5F2D354E05296D6 /* SystemCacheCleanerView.swift */,
+				B5A546F1BE79663F806DBCB4 /* WorldMapPatternView.swift */,
+				1DD940C0BC2750369B186238 /* SparklingStarsView.swift */,
+				86AB4A87952C513DDA212F51 /* GlowingCardModifier.swift */,
+				1BFD46759D864D9C28107A47 /* SettingsView.swift */,
+				51674AB8B582F00B8FEC3EB7 /* StorageDetailView.swift */,
+				191942C2AF450B72538C06AE /* HowToUseView.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		91D224DAE1F7F5BF75E0912D /* CleanerGuru */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2E55F102B00A5E4280173655 /* Build configuration list for PBXNativeTarget "CleanerGuru" */;
+			buildPhases = (
+				F5E7885E092E226FBE5DF88A /* [CP] Check Pods Manifest.lock */,
+				0AC3E14B27BB003B38722B69 /* Sources */,
+				4B54C1CAEC04E658BF90C0C4 /* Resources */,
+				4800320484553CBF717EA2A5 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CleanerGuru;
+			productName = CleanerGuru;
+			productReference = 8143DEFCF337AD6587B5C933 /* CleanerGuru.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7C48B9EAA5C3659870AD4333 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1620;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = 51FB370A1A6E0F67E91D846F /* Build configuration list for PBXProject "CleanerGuru" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 5CF1836003F1037D779CBAFB;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 54;
+			productRefGroup = 1FB3960D182E990A18024376 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				91D224DAE1F7F5BF75E0912D /* CleanerGuru */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4B54C1CAEC04E658BF90C0C4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A95C361FF93128CE901B5F68 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		F5E7885E092E226FBE5DF88A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CleanerGuru-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0AC3E14B27BB003B38722B69 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				58D4171C54B4D955D9141934 /* AboutView.swift in Sources */,
+				753B84B62DC01C3CCAF53B7F /* AppConstants.swift in Sources */,
+				A9506D397509DF8F30B7B8BC /* AppLogger.swift in Sources */,
+				B8F277DCE41640456E4EC2C3 /* BatterySaverModeView.swift in Sources */,
+				E14F795162543422ED934B76 /* CleanerGuruApp.swift in Sources */,
+				5A9C3BA224F9C625CCD00251 /* GamingPerformanceModeView.swift in Sources */,
+				E6092C5CEDB8DF58CFDB77D8 /* MainDashboardView.swift in Sources */,
+				1C03944AE53F35CC61F851B1 /* PhotoLibraryCleanupView.swift in Sources */,
+				A9B10AE31ED8459CAEBD87D6 /* SplashScreenView.swift in Sources */,
+				E4B9D685CCE5B79555645171 /* ThemeManager.swift in Sources */,
+				7012FAEFDACBA1E1922A10E6 /* WalkthroughView.swift in Sources */,
+				F97548ABAF19BC84FAB2F287 /* DuplicatePhotoScannerView.swift in Sources */,
+				07944AAF9C7527FAF65EC62B /* DuplicateFileScannerView.swift in Sources */,
+				21114215B8D77737A64A4F38 /* SystemCacheCleanerView.swift in Sources */,
+				3D894AE5A2B599EEFFB18B71 /* WorldMapPatternView.swift in Sources */,
+				BB5349ACB9531AB81E6A83BA /* SparklingStarsView.swift in Sources */,
+				B98240A09A68EC51D45E2830 /* GlowingCardModifier.swift in Sources */,
+				C0B34CC7BF3D4C2DF8AE5FBC /* SettingsView.swift in Sources */,
+				18AC47CEBB2221BD1C93093E /* StorageDetailView.swift in Sources */,
+				08484E6F8BCC430E3B16CC2A /* HowToUseView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		24723C6712E58AA1401B052B /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 239949980CBD2DA904B20426 /* Pods-CleanerGuru.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				BUNDLE_DISPLAY_NAME = "Cleaner Guru";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				EXECUTABLE_NAME = "$(PRODUCT_NAME)";
+				INFOPLIST_FILE = Sources/Info.plist;
+				INFOPLIST_KEY_PrivacyManifestPath = Resources/PrivacyInfo.xcprivacy;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kidblunt.cleanerguru;
+				PRODUCT_NAME = CleanerGuru;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		4C0D490A75EE1F0C8DFE0BA3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9B5B01BC1291D785796C0F52 /* Pods-CleanerGuru.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				BUNDLE_DISPLAY_NAME = "Cleaner Guru";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				EXECUTABLE_NAME = "$(PRODUCT_NAME)";
+				INFOPLIST_FILE = Sources/Info.plist;
+				INFOPLIST_KEY_PrivacyManifestPath = Resources/PrivacyInfo.xcprivacy;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kidblunt.cleanerguru;
+				PRODUCT_NAME = CleanerGuru;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		EDCA6D21E42A8C507431E136 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		FB86D799767F6EE5C679E420 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2E55F102B00A5E4280173655 /* Build configuration list for PBXNativeTarget "CleanerGuru" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C0D490A75EE1F0C8DFE0BA3 /* Debug */,
+				24723C6712E58AA1401B052B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		51FB370A1A6E0F67E91D846F /* Build configuration list for PBXProject "CleanerGuru" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EDCA6D21E42A8C507431E136 /* Debug */,
+				FB86D799767F6EE5C679E420 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7C48B9EAA5C3659870AD4333 /* Project object */;
+}
