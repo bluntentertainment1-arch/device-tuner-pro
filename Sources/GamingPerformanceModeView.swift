@@ -3,68 +3,43 @@ import UIKit
 
 struct GamingPerformanceModeView: View {
     @EnvironmentObject var themeManager: ThemeManager
-    @EnvironmentObject var adManager: AdManager
     @Environment(\.dismiss) var dismiss
     @StateObject private var viewModel = GamingModeViewModel()
     @State private var showPermissionAlert = false
     @State private var permissionMessage = ""
-    @State private var showRewardedAdBlock = false
-    @State private var pendingToggleValue = false
     
     var body: some View {
         ZStack {
             themeManager.background
                 .ignoresSafeArea()
             
-            VStack(spacing: 0) {
-                ScrollView {
-                    VStack(spacing: 20) {
-                        performanceStatusCard
-                        
-                        mainToggleCard
-                        
-                        if viewModel.isGamingModeActive {
-                            activeGamingSessionCard
-                                .transition(.asymmetric(
-                                    insertion: .scale.combined(with: .opacity),
-                                    removal: .scale.combined(with: .opacity)
-                                ))
-                        }
-                        
-                        settingsCard
-                        
-                        if viewModel.cpuBoostEnabled {
-                            performanceMetricsCard
-                        }
-                        
-                        tipsCard
-                        
-                        disclaimerCard
+            ScrollView {
+                VStack(spacing: 20) {
+                    performanceStatusCard
+                    
+                    mainToggleCard
+                    
+                    if viewModel.isGamingModeActive {
+                        activeGamingSessionCard
+                            .transition(.asymmetric(
+                                insertion: .scale.combined(with: .opacity),
+                                removal: .scale.combined(with: .opacity)
+                            ))
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.top, 20)
-                    .padding(.bottom, max(100, adManager.bannerViewHeight + 20))
+                    
+                    settingsCard
+                    
+                    if viewModel.cpuBoostEnabled {
+                        performanceMetricsCard
+                    }
+                    
+                    tipsCard
+                    
+                    disclaimerCard
                 }
-                
-                BannerAdView(adUnitID: adManager.bannerAdUnitID)
-                    .frame(height: adManager.bannerViewHeight)
-                    .background(themeManager.cardBackground)
-            }
-            
-            if showRewardedAdBlock {
-                RewardedAdBlockView(
-                    message: "Watch a short ad to extend Gaming Mode by 60 minutes!",
-                    onAdWatched: {
-                        showRewardedAdBlock = false
-                        viewModel.extendGamingMode()
-                        viewModel.toggleGamingMode(pendingToggleValue)
-                    },
-                    onCancel: {
-                        showRewardedAdBlock = false
-                        viewModel.isGamingModeActive = !pendingToggleValue
-                    }
-                )
-                .transition(.opacity)
+                .padding(.horizontal, 20)
+                .padding(.top, 20)
+                .padding(.bottom, 40)
             }
         }
         .navigationTitle("Gaming Mode")
@@ -86,7 +61,6 @@ struct GamingPerformanceModeView: View {
                 permissionMessage = message
                 showPermissionAlert = true
             }
-            adManager.loadRewardedAd()
         }
         .onDisappear {
             viewModel.stopTimerUpdates()
@@ -182,14 +156,7 @@ struct GamingPerformanceModeView: View {
                 Toggle("", isOn: $viewModel.isGamingModeActive)
                     .tint(themeManager.accentColor)
                     .onChange(of: viewModel.isGamingModeActive) { newValue in
-                        if newValue {
-                            pendingToggleValue = newValue
-                            withAnimation {
-                                showRewardedAdBlock = true
-                            }
-                        } else {
-                            viewModel.toggleGamingMode(newValue)
-                        }
+                        viewModel.toggleGamingMode(newValue)
                     }
             }
             
@@ -532,9 +499,6 @@ class GamingModeViewModel: ObservableObject {
         checkAndRestoreGamingMode()
     }
     
-    func extendGamingMode() {
-    }
-    
     private func requestPerformancePermissions() {
         var info = mach_task_basic_info()
         var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size) / 4
@@ -700,10 +664,6 @@ class GamingModeViewModel: ObservableObject {
     private func loadSettings() {
         isGamingModeActive = UserDefaults.standard.bool(forKey: "gamingModeActive")
         cpuBoostEnabled = UserDefaults.standard.bool(forKey: "cpuBoostEnabled")
-        
-        if isGamingModeActive {
-            startCPUMonitoring()
-        }
     }
     
     deinit {

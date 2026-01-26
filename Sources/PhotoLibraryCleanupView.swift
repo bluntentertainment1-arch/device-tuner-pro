@@ -4,7 +4,6 @@ import PhotosUI
 
 struct PhotoLibraryCleanupView: View {
     @EnvironmentObject var themeManager: ThemeManager
-    @EnvironmentObject var adManager: AdManager
     @Environment(\.dismiss) var dismiss
     @StateObject private var viewModel = PhotoCleanupViewModel()
     @State private var showPermissionAlert = false
@@ -16,20 +15,12 @@ struct PhotoLibraryCleanupView: View {
             themeManager.background
                 .ignoresSafeArea()
             
-            VStack(spacing: 0) {
-                if viewModel.isScanning {
-                    scanningView
-                } else if viewModel.photos.isEmpty {
-                    emptyStateView
-                } else {
-                    photoGridView
-                }
-                
-                if !viewModel.isScanning && !viewModel.photos.isEmpty {
-                    BannerAdView(adUnitID: adManager.bannerAdUnitID)
-                        .frame(height: adManager.bannerViewHeight)
-                        .background(themeManager.cardBackground)
-                }
+            if viewModel.isScanning {
+                scanningView
+            } else if viewModel.photos.isEmpty {
+                emptyStateView
+            } else {
+                photoGridView
             }
             
             if viewModel.isDeleting {
@@ -66,10 +57,6 @@ struct PhotoLibraryCleanupView: View {
                     permissionAlertMessage = message
                     showPermissionAlert = true
                 }
-            }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                adManager.showInterstitialAd()
             }
         }
     }
@@ -153,7 +140,7 @@ struct PhotoLibraryCleanupView: View {
                     }
                 }
                 .padding(16)
-                .padding(.bottom, max(100, adManager.bannerViewHeight + 100))
+                .padding(.bottom, 100)
             }
             
             VStack(spacing: 12) {

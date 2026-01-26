@@ -3,64 +3,38 @@ import UIKit
 
 struct BatterySaverModeView: View {
     @EnvironmentObject var themeManager: ThemeManager
-    @EnvironmentObject var adManager: AdManager
     @Environment(\.dismiss) var dismiss
     @StateObject private var viewModel = BatterySaverViewModel()
-    @State private var showPermissionAlert = false
-    @State private var permissionMessage = ""
-    @State private var showRewardedAdBlock = false
-    @State private var pendingToggleValue = false
+    @State private var showDeleteConfirmation = false
     
     var body: some View {
         ZStack {
             themeManager.background
                 .ignoresSafeArea()
             
-            VStack(spacing: 0) {
-                ScrollView {
-                    VStack(spacing: 20) {
-                        batteryStatusCard
-                        
-                        mainToggleCard
-                        
-                        if viewModel.isBatterySaverActive {
-                            advancedBatteryInfoCard
-                                .transition(.asymmetric(
-                                    insertion: .scale.combined(with: .opacity),
-                                    removal: .scale.combined(with: .opacity)
-                                ))
-                        }
-                        
-                        optimizationSettingsCard
-                        
-                        tipsCard
-                        
-                        disclaimerCard
+            ScrollView {
+                VStack(spacing: 20) {
+                    batteryStatusCard
+                    
+                    mainToggleCard
+                    
+                    if viewModel.isBatterySaverActive {
+                        advancedBatteryInfoCard
+                            .transition(.asymmetric(
+                                insertion: .scale.combined(with: .opacity),
+                                removal: .scale.combined(with: .opacity)
+                            ))
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.top, 20)
-                    .padding(.bottom, max(100, adManager.bannerViewHeight + 20))
+                    
+                    optimizationSettingsCard
+                    
+                    tipsCard
+                    
+                    disclaimerCard
                 }
-                
-                BannerAdView(adUnitID: adManager.bannerAdUnitID)
-                    .frame(height: adManager.bannerViewHeight)
-                    .background(themeManager.cardBackground)
-            }
-            
-            if showRewardedAdBlock {
-                RewardedAdBlockView(
-                    message: "Watch a short ad to extend Battery Monitoring by 60 minutes!",
-                    onAdWatched: {
-                        showRewardedAdBlock = false
-                        viewModel.extendBatterySaver()
-                        viewModel.toggleBatterySaver(pendingToggleValue)
-                    },
-                    onCancel: {
-                        showRewardedAdBlock = false
-                        viewModel.isBatterySaverActive = !pendingToggleValue
-                    }
-                )
-                .transition(.opacity)
+                .padding(.horizontal, 20)
+                .padding(.top, 20)
+                .padding(.bottom, 40)
             }
         }
         .navigationTitle("Battery Monitoring")
@@ -68,7 +42,6 @@ struct BatterySaverModeView: View {
         .onAppear {
             themeManager.updateTheme()
             viewModel.updateBatteryStatus()
-            adManager.loadRewardedAd()
         }
         .onDisappear {
             viewModel.stopTimerUpdates()
@@ -172,12 +145,7 @@ struct BatterySaverModeView: View {
                 Toggle("", isOn: $viewModel.isBatterySaverActive)
                     .tint(themeManager.accentColor)
                     .onChange(of: viewModel.isBatterySaverActive) { newValue in
-                        if newValue {
-                            pendingToggleValue = newValue
-                            withAnimation {
-                                showRewardedAdBlock = true
-                            }
-                        } else {
+                        withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
                             viewModel.toggleBatterySaver(newValue)
                         }
                     }
@@ -445,9 +413,6 @@ class BatterySaverViewModel: ObservableObject {
         updateBatteryStatus()
         updateAdvancedBatteryInfo()
         checkAndRestoreBatteryMode()
-    }
-    
-    func extendBatterySaver() {
     }
     
     func updateBatteryStatus() {
