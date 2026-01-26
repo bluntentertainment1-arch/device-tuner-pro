@@ -474,16 +474,16 @@ struct MainDashboardView: View {
         .shadow(color: themeManager.glowColor.opacity(0.3), radius: 8, x: 0, y: 0)
     }
     
-    private var performanceModesCard: some View {
-        VStack(spacing: 12) {
+     private var performanceModesCard: some View {
+        VStack(spacing: 16) {
             HStack {
                 Text("Monitoring Modes")
-                    .font(.system(size: 18, weight: .semibold))
+                    .font(.system(size: 20, weight: .bold))
                     .foregroundColor(themeManager.primaryText)
                 Spacer()
             }
             
-            VStack(spacing: 12) {
+            VStack(spacing: 16) {
                 NavigationLink(destination: BatterySaverModeView()) {
                     performanceModeRow(
                         icon: "battery.100.bolt",
@@ -505,8 +505,50 @@ struct MainDashboardView: View {
                 }
             }
         }
-        .padding(20)
-        .glowingCard(glowColor: themeManager.neonGreen)
+        .padding(24)
+        .background(
+            ZStack {
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                themeManager.cardBackground,
+                                themeManager.cardBackground.opacity(0.95)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color.white.opacity(themeManager.isDarkMode ? 0.05 : 0.3),
+                                Color.clear
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(
+                        LinearGradient(
+                            colors: [
+                                themeManager.accentColor.opacity(0.5),
+                                themeManager.electricPink.opacity(0.3),
+                                themeManager.electricCyan.opacity(0.5)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: 1.5
+                    )
+            }
+        )
+        .shadow(color: themeManager.accentColor.opacity(0.2), radius: 20, x: 0, y: 10)
+        .shadow(color: themeManager.electricPink.opacity(0.15), radius: 30, x: 0, y: 15)
     }
     
     private var disclaimerCard: some View {
@@ -540,63 +582,111 @@ struct MainDashboardView: View {
     private func performanceModeRow(icon: String, title: String, description: String, isActive: Bool, gradient: LinearGradient) -> some View {
         HStack(spacing: 16) {
             ZStack {
-                Circle()
-                    .fill(isActive ? themeManager.indicatorGreen : themeManager.indicatorRed)
-                    .frame(width: 10, height: 10)
-                    .shadow(color: isActive ? themeManager.indicatorGreen.opacity(0.8) : themeManager.indicatorRed.opacity(0.8), radius: 6, x: 0, y: 0)
-                    .shadow(color: isActive ? themeManager.indicatorGreen.opacity(0.5) : themeManager.indicatorRed.opacity(0.5), radius: 10, x: 0, y: 0)
-                    .scaleEffect(indicatorPulse)
-                    .animation(.easeInOut(duration: 1.0).repeatForever(autoreverses: true), value: indicatorPulse)
-            }
-            .frame(width: 18, height: 18)
-            
-            ZStack {
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(isActive ? gradient : LinearGradient(colors: [themeManager.borderColor], startPoint: .leading, endPoint: .trailing))
-                    .frame(width: 44, height: 44)
-                    .shadow(color: isActive ? themeManager.accentColor.opacity(0.6) : Color.clear, radius: 10, x: 0, y: 0)
-                    .shadow(color: isActive ? themeManager.accentColor.opacity(0.3) : Color.clear, radius: 15, x: 0, y: 0)
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(isActive ? gradient : LinearGradient(colors: [themeManager.borderColor.opacity(0.3)], startPoint: .leading, endPoint: .trailing))
+                    .frame(width: 52, height: 52)
+                    .shadow(color: isActive ? themeManager.accentColor.opacity(0.5) : Color.clear, radius: 12, x: 0, y: 4)
+                    .shadow(color: isActive ? themeManager.accentColor.opacity(0.3) : Color.clear, radius: 18, x: 0, y: 6)
                 
                 Image(systemName: icon)
-                    .font(.system(size: 24))
+                    .font(.system(size: 26, weight: .semibold))
                     .foregroundColor(isActive ? .white : themeManager.secondaryText)
             }
             
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 6) {
                 Text(title)
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.system(size: 17, weight: .bold))
                     .foregroundColor(themeManager.primaryText)
                 
                 Text(description)
-                    .font(.system(size: 13, weight: .regular))
+                    .font(.system(size: 14, weight: .regular))
                     .foregroundColor(themeManager.secondaryText)
             }
             
             Spacer()
             
-            if isActive {
-                Text("Active")
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(themeManager.neonGreen)
-                    .cornerRadius(12)
-                    .shadow(color: themeManager.neonGreen.opacity(0.6), radius: 8, x: 0, y: 0)
-            }
-            
             Image(systemName: "chevron.right")
-                .font(.system(size: 14, weight: .semibold))
-                .foregroundColor(themeManager.accentColor)
+                .font(.system(size: 15, weight: .bold))
+                .foregroundColor(themeManager.accentColor.opacity(0.7))
         }
-        .padding(16)
-        .background(themeManager.cardBackground)
-        .cornerRadius(12)
-        .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(isActive ? gradient : LinearGradient(colors: [themeManager.borderColor], startPoint: .leading, endPoint: .trailing), lineWidth: isActive ? 2 : 1)
+        .padding(18)
+        .background(
+            ZStack {
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(themeManager.cardBackground)
+                
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color.white.opacity(themeManager.isDarkMode ? 0.03 : 0.2),
+                                Color.clear
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(
+                        isActive ? 
+                        LinearGradient(
+                            colors: [themeManager.accentColor.opacity(0.4), themeManager.electricPink.opacity(0.3)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ) : 
+                        LinearGradient(
+                            colors: [themeManager.borderColor.opacity(0.3)],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        ),
+                        lineWidth: isActive ? 1.5 : 1
+                    )
+            }
         )
-        .shadow(color: isActive ? themeManager.glowColor.opacity(0.4) : Color.clear, radius: 12, x: 0, y: 0)
+        .shadow(color: isActive ? themeManager.glowColor.opacity(0.3) : Color.black.opacity(0.05), radius: isActive ? 15 : 8, x: 0, y: isActive ? 8 : 4)
+    }
+}
+
+struct ScrollOffsetPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
+    }
+}
+
+struct NavigationBarBackgroundModifier: UIViewControllerRepresentable {
+    let scrollOffset: CGFloat
+    let themeManager: ThemeManager
+    
+    func makeUIViewController(context: Context) -> UIViewController {
+        let viewController = UIViewController()
+        return viewController
+    }
+    
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        DispatchQueue.main.async {
+            if let navigationController = uiViewController.navigationController {
+                let appearance = UINavigationBarAppearance()
+                
+                let opacity = min(1.0, max(0.0, -scrollOffset / 100.0))
+                
+                if opacity > 0.1 {
+                    appearance.configureWithOpaqueBackground()
+                    let backgroundColor = UIColor(themeManager.cardBackground).withAlphaComponent(opacity)
+                    appearance.backgroundColor = backgroundColor
+                    appearance.shadowColor = UIColor.black.withAlphaComponent(opacity * 0.1)
+                } else {
+                    appearance.configureWithTransparentBackground()
+                    appearance.backgroundColor = .clear
+                    appearance.shadowColor = .clear
+                }
+                
+                navigationController.navigationBar.standardAppearance = appearance
+                navigationController.navigationBar.scrollEdgeAppearance = appearance
+                navigationController.navigationBar.compactAppearance = appearance
+            }
+        }
     }
 }
 
