@@ -29,6 +29,9 @@
 		E4B9D685CCE5B79555645171 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EAB40A0D5E51A5823B0C85A /* ThemeManager.swift */; };
 		E6092C5CEDB8DF58CFDB77D8 /* MainDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BE6C6636DB8AF492500713 /* MainDashboardView.swift */; };
 		F97548ABAF19BC84FAB2F287 /* DuplicatePhotoScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94C4F23A2170F72B7A8ED2C /* DuplicatePhotoScannerView.swift */; };
+    111111111111111111111111 /* AdManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222222222222222222222222 /* AdManager.swift */; };
+    333333333333333333333333 /* BannerAdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 444444444444444444444444 /* BannerAdView.swift */; };
+    555555555555555555555555 /* RewardedAdBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 666666666666666666666666 /* RewardedAdBlockView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
