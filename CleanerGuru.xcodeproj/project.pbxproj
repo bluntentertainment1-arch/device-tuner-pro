@@ -62,6 +62,9 @@
 		CE2B48A416FFFBB88CB590ED /* SplashScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
 		E64271303E12AEA926059EF1 /* WalkthroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughView.swift; sourceTree = "<group>"; };
 		F94C4F23A2170F72B7A8ED2C /* DuplicatePhotoScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DuplicatePhotoScannerView.swift; path = Sources/DuplicatePhotoScannerView.swift; sourceTree = SOURCE_ROOT; };
+    222222222222222222222222 /* AdManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/AdManager.swift; sourceTree = "<group>"; };
+    444444444444444444444444 /* BannerAdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BannerAdView.swift; sourceTree = "<group>"; };
+    666666666666666666666666 /* RewardedAdBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/RewardedAdBlockView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
