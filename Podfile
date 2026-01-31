@@ -6,8 +6,9 @@ target 'CleanerGuru' do
   use_frameworks!
 
   # Pods for CleanerGuru
-  pod 'Google-Mobile-Ads-SDK'
-  pod 'GoogleUserMessagingPlatform'
+  # Use an older Google-Mobile-Ads-SDK so your existing code works
+  pod 'Google-Mobile-Ads-SDK', '9.9.0'
+  pod 'GoogleUserMessagingPlatform', '2.0.0'
 
 end
 
