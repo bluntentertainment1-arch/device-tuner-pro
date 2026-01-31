@@ -35,8 +35,10 @@
 	<array>
 		<string>armv7</string>
 	</array>
+<dict>
 <key>NSUserTrackingUsageDescription</key>
 <string>This helps us show relevant ads and keep the app free.</string>
+<dict/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
