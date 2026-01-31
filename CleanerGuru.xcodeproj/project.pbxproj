@@ -265,6 +265,9 @@
 				C0B34CC7BF3D4C2DF8AE5FBC /* SettingsView.swift in Sources */,
 				18AC47CEBB2221BD1C93093E /* StorageDetailView.swift in Sources */,
 				08484E6F8BCC430E3B16CC2A /* HowToUseView.swift in Sources */,
+        111111111111111111111111 /* AdManager.swift in Sources */,
+        333333333333333333333333 /* BannerAdView.swift in Sources */,
+        555555555555555555555555 /* RewardedAdBlockView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
