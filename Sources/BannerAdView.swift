@@ -34,9 +34,15 @@ struct BannerAdView: UIViewRepresentable {
 #endif
 		banner.adUnitID = adUnitID
 		
-		if let window = UIApplication.shared.windows.first, let rootVC = window.rootViewController {
-			banner.rootViewController = rootVC
-		}
+		// Get the key window safely on iOS 13+
+if let window = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })   // get all window scenes
+            .flatMap({ $0.windows })                // get all windows in those scenes
+            .first(where: { $0.isKeyWindow }),      // pick the key window
+   let rootVC = window.rootViewController {       // get its root view controller
+    // Now you can use rootVC safely
+    rootVC.present(yourViewController, animated: true)
+}
 		banner.delegate = context.coordinator
 		
 		let request = GADRequest()
