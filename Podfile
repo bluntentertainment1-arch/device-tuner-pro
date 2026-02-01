@@ -1,17 +1,36 @@
 platform :ios, '16.0'
-use_frameworks!
+
+use_frameworks! :linkage => :static
+inhibit_all_warnings!
 
 target 'CleanerGuru' do
-  pod 'Google-Mobile-Ads-SDK', '~> 10.6'
-  pod 'GoogleUserMessagingPlatform', '~> 2.0'
+  # --- Google / Ads / Analytics ---
+  pod 'Google-Mobile-Ads-SDK'
+  pod 'GoogleUserMessagingPlatform'
+  pod 'GoogleAppMeasurement'
+
+  # --- Firebase (only if you actually use it; remove if not) ---
+  # pod 'Firebase/Core'
+  # pod 'Firebase/Analytics'
+
 end
 
+# -------------------------------------------------
+# 🔧 CRITICAL FIX FOR BITRISE / CI BUILDS
+# Prevents: "source: unbound variable"
+# -------------------------------------------------
 post_install do |installer|
   installer.pods_project.targets.each do |target|
-    target.build_configurations.each do |config|
-      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
-      config.build_settings['ENABLE_BITCODE'] = 'NO'
-      config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+    target.build_phases.each do |phase|
+      if phase.respond_to?(:shell_script) &&
+         phase.shell_script.include?('set -u')
+        phase.shell_script = phase.shell_script.gsub('set -u', '')
+      end
     end
+  end
+
+  # Optional but recommended for CI stability
+  installer.pods_project.build_configurations.each do |config|
+    config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
   end
 end
