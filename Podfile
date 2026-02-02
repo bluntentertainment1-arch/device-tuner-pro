@@ -8,29 +8,19 @@ target 'CleanerGuru' do
   pod 'Google-Mobile-Ads-SDK'
   pod 'GoogleUserMessagingPlatform'
   pod 'GoogleAppMeasurement'
-
-  # --- Firebase (only if you actually use it; remove if not) ---
-  # pod 'Firebase/Core'
-  # pod 'Firebase/Analytics'
-
 end
 
 # -------------------------------------------------
-# 🔧 CRITICAL FIX FOR BITRISE / CI BUILDS
-# Prevents: "source: unbound variable"
+# 🔧 CRITICAL FIX FOR BITRISE + XCODE 26+
+# Prevents sandbox error:
+# "deny file-write-create ... Pods/resources-to-copy-*.txt"
+#
+# Forces CocoaPods to write to BUILD_DIR instead of repo
 # -------------------------------------------------
 post_install do |installer|
   installer.pods_project.targets.each do |target|
-    target.build_phases.each do |phase|
-      if phase.respond_to?(:shell_script) &&
-         phase.shell_script.include?('set -u')
-        phase.shell_script = phase.shell_script.gsub('set -u', '')
-      end
+    target.build_configurations.each do |config|
+      config.build_settings['PODS_ROOT'] = '$(BUILD_DIR)/Pods'
     end
-  end
-
-  # Optional but recommended for CI stability
-  installer.pods_project.build_configurations.each do |config|
-    config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
   end
 end
