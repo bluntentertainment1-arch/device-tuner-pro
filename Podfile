@@ -3,24 +3,25 @@ platform :ios, '16.0'
 use_frameworks! :linkage => :static
 inhibit_all_warnings!
 
+# 🚨 CI-SAFE CocoaPods config (REQUIRED)
+install! 'cocoapods',
+  :disable_input_output_paths => true
+
 target 'CleanerGuru' do
-  # --- Google / Ads / Analytics ---
   pod 'Google-Mobile-Ads-SDK'
   pod 'GoogleUserMessagingPlatform'
   pod 'GoogleAppMeasurement'
 end
 
-# -------------------------------------------------
-# 🔧 CRITICAL FIX FOR BITRISE + XCODE 26+
-# Prevents sandbox error:
-# "deny file-write-create ... Pods/resources-to-copy-*.txt"
-#
-# Forces CocoaPods to write to BUILD_DIR instead of repo
-# -------------------------------------------------
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
-      config.build_settings['PODS_ROOT'] = '$(BUILD_DIR)/Pods'
+
+      # 🔑 REQUIRED for Xcode 15/16 + Bitrise
+      config.build_settings['USE_RECURSIVE_SCRIPT_INPUTS_IN_SCRIPT_PHASES'] = 'NO'
+
+      # Stability
+      config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
     end
   end
 end
