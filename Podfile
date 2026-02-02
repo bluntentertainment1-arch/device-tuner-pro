@@ -1,27 +1,20 @@
-platform :ios, '16.0'
-
-use_frameworks!
-inhibit_all_warnings!
-
-# 🚨 CI-SAFE CocoaPods config (REQUIRED)
-install! 'cocoapods',
-  :disable_input_output_paths => true
+# Uncomment the next line to define a global platform for your project
+platform :ios, '14.0'
 
 target 'CleanerGuru' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for CleanerGuru
   pod 'Google-Mobile-Ads-SDK'
   pod 'GoogleUserMessagingPlatform'
-  pod 'GoogleAppMeasurement'
+
 end
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
-
-      # 🔑 REQUIRED for Xcode 15/16 + Bitrise
-      config.build_settings['USE_RECURSIVE_SCRIPT_INPUTS_IN_SCRIPT_PHASES'] = 'NO'
-
-      # Stability
-      config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.0'
     end
   end
 end
