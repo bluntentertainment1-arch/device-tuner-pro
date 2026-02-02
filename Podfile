@@ -1,6 +1,6 @@
 platform :ios, '16.0'
 
-use_frameworks! :linkage => :static
+use_frameworks!
 inhibit_all_warnings!
 
 # 🚨 CI-SAFE CocoaPods config (REQUIRED)
