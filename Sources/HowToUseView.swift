@@ -8,7 +8,7 @@ struct GDPRRegion {
     ]
 
     static func isEUorUKUser() -> Bool {
-        let regionCode = Locale.current.regionCode ?? ""
+        let regionCode = Locale.current.region?.identifier ?? ""
         return euCountryCodes.contains(regionCode) || regionCode == "GB"
     }
 }
