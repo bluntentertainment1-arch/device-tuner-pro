@@ -82,7 +82,7 @@ class AdManager: NSObject, ObservableObject {
         }
         
         rewardedAdCompletion = completion
-        rewardedAd.present(fromRootViewController: rootViewController) { [weak self] in
+        rewardedAd.present(from: rootViewController) { [weak self] in
             guard let self = self else { return }
             print("User earned reward")
             Task { @MainActor in
@@ -100,7 +100,7 @@ class AdManager: NSObject, ObservableObject {
     func loadInterstitialAd() {
         #if canImport(GoogleMobileAds)
         let request = Request()
-       InterstitialAd.load(withAdUnitID: interstitialAdUnitID, request: request) { [weak self] ad, error in
+       InterstitialAd.load(with: interstitialAdUnitID, request: request) { [weak self] ad, error in
             guard let self = self else { return }
             
             Task { @MainActor in
