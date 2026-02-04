@@ -24,7 +24,11 @@ struct MainDashboardView: View {
                 themeManager.background
                     .ignoresSafeArea()
                 
-                SparklingStarsView()
+                FloatingParticlesView()
+                
+                if themeManager.enableSparklingStars {
+                    SparklingStarsView()
+                }
                 
                 VStack(spacing: 0) {
                     ScrollView {
@@ -253,6 +257,12 @@ struct MainDashboardView: View {
                     .frame(width: 150, height: 150)
                     .rotationEffect(.degrees(-90 + circleRotation))
                     .animation(.easeInOut(duration: 0.3), value: displayScore)
+                    .shadow(
+                        color: themeManager.enableGlowEffects ? themeManager.accentColor.opacity(0.5) : Color.clear,
+                        radius: themeManager.enableGlowEffects ? 10 : 0,
+                        x: 0,
+                        y: 0
+                    )
                 
                 VStack(spacing: 4) {
                     Text("\(displayScore)%")
@@ -304,6 +314,12 @@ struct MainDashboardView: View {
                 )
                 .cornerRadius(12)
                 .scaleEffect(showRefreshAnimation ? 1.02 : 1.0)
+                .shadow(
+                    color: themeManager.enableGlowEffects ? (showRefreshAnimation ? themeManager.neonGreen.opacity(0.5) : themeManager.buttonBackground.opacity(0.3)) : Color.clear,
+                    radius: themeManager.enableGlowEffects ? 12 : 0,
+                    x: 0,
+                    y: 0
+                )
             }
             .disabled(showRefreshAnimation || isAnimatingScore)
         }
@@ -465,6 +481,12 @@ struct MainDashboardView: View {
                 RoundedRectangle(cornerRadius: 10)
                     .fill(gradient)
                     .frame(width: 44, height: 44)
+                    .shadow(
+                        color: themeManager.enableGlowEffects ? themeManager.accentColor.opacity(0.4) : Color.clear,
+                        radius: themeManager.enableGlowEffects ? 8 : 0,
+                        x: 0,
+                        y: 0
+                    )
                 
                 Image(systemName: icon)
                     .font(.system(size: 24))
@@ -569,7 +591,12 @@ struct MainDashboardView: View {
                     )
             }
         )
-        .shadow(color: themeManager.accentColor.opacity(0.15), radius: 15, x: 0, y: 8)
+        .shadow(
+            color: themeManager.enableGlowEffects ? themeManager.accentColor.opacity(0.15) : Color.clear,
+            radius: themeManager.enableGlowEffects ? 15 : 0,
+            x: 0,
+            y: 8
+        )
     }
     
     private var disclaimerCard: some View {
@@ -606,6 +633,12 @@ struct MainDashboardView: View {
                 RoundedRectangle(cornerRadius: 12)
                     .fill(isActive ? gradient : LinearGradient(colors: [themeManager.borderColor.opacity(0.3)], startPoint: .leading, endPoint: .trailing))
                     .frame(width: 52, height: 52)
+                    .shadow(
+                        color: themeManager.enableGlowEffects && isActive ? themeManager.accentColor.opacity(0.5) : Color.clear,
+                        radius: themeManager.enableGlowEffects ? 10 : 0,
+                        x: 0,
+                        y: 0
+                    )
                 
                 Image(systemName: icon)
                     .font(.system(size: 26, weight: .semibold))
@@ -663,7 +696,12 @@ struct MainDashboardView: View {
                     )
             }
         )
-        .shadow(color: isActive ? themeManager.glowColor.opacity(0.2) : Color.black.opacity(0.03), radius: isActive ? 12 : 6, x: 0, y: isActive ? 6 : 3)
+        .shadow(
+            color: themeManager.enableGlowEffects && isActive ? themeManager.glowColor.opacity(0.2) : Color.black.opacity(0.03),
+            radius: themeManager.enableGlowEffects && isActive ? 12 : 6,
+            x: 0,
+            y: isActive ? 6 : 3
+        )
     }
 }
 

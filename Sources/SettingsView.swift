@@ -5,9 +5,13 @@ struct SettingsView: View {
     @Environment(\.dismiss) var dismiss
     @State private var selectedTheme: ThemeManager.ThemeMode
     @State private var showHowToUse = false
+    @State private var enableSparklingStars: Bool
+    @State private var enableGlowEffects: Bool
     
     init() {
         _selectedTheme = State(initialValue: ThemeManager.shared.themeMode)
+        _enableSparklingStars = State(initialValue: ThemeManager.shared.enableSparklingStars)
+        _enableGlowEffects = State(initialValue: ThemeManager.shared.enableGlowEffects)
     }
     
     var body: some View {
@@ -19,6 +23,8 @@ struct SettingsView: View {
                 ScrollView {
                     VStack(spacing: 24) {
                         themeSelectionCard
+                        
+                        visualEffectsCard
                         
                         howToUseCard
                         
@@ -45,6 +51,8 @@ struct SettingsView: View {
         .accentColor(themeManager.navigationText)
         .onAppear {
             selectedTheme = themeManager.themeMode
+            enableSparklingStars = themeManager.enableSparklingStars
+            enableGlowEffects = themeManager.enableGlowEffects
         }
     }
     
@@ -61,6 +69,40 @@ struct SettingsView: View {
                 ForEach(ThemeManager.ThemeMode.allCases, id: \.self) { mode in
                     themeOptionRow(mode: mode)
                 }
+            }
+        }
+        .padding(20)
+        .background(themeManager.cardBackground)
+        .cornerRadius(16)
+        .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 4)
+    }
+    
+    private var visualEffectsCard: some View {
+        VStack(spacing: 16) {
+            HStack {
+                Text("Visual Effects")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundColor(themeManager.primaryText)
+                Spacer()
+            }
+            
+            VStack(spacing: 12) {
+                visualEffectRow(
+                    icon: "sparkles",
+                    title: "Sparkling Stars",
+                    description: "Show animated stars in the background",
+                    isOn: $enableSparklingStars
+                )
+                
+                Divider()
+                    .background(themeManager.borderColor)
+                
+                visualEffectRow(
+                    icon: "light.max",
+                    title: "Glow Effects",
+                    description: "Enable glowing shadows and highlights",
+                    isOn: $enableGlowEffects
+                )
             }
         }
         .padding(20)
@@ -129,6 +171,45 @@ struct SettingsView: View {
             )
         }
         .buttonStyle(PlainButtonStyle())
+    }
+    
+    private func visualEffectRow(icon: String, title: String, description: String, isOn: Binding<Bool>) -> some View {
+        HStack(spacing: 16) {
+            ZStack {
+                Circle()
+                    .fill(themeManager.accentColor.opacity(0.1))
+                    .frame(width: 40, height: 40)
+                
+                Image(systemName: icon)
+                    .font(.system(size: 20))
+                    .foregroundColor(themeManager.accentColor)
+            }
+            
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(themeManager.primaryText)
+                
+                Text(description)
+                    .font(.system(size: 13, weight: .regular))
+                    .foregroundColor(themeManager.secondaryText)
+            }
+            
+            Spacer()
+            
+            Toggle("", isOn: isOn)
+                .tint(themeManager.accentColor)
+                .onChange(of: isOn.wrappedValue) { newValue in
+                    if icon == "sparkles" {
+                        themeManager.toggleSparklingStars(newValue)
+                    } else if icon == "light.max" {
+                        themeManager.toggleGlowEffects(newValue)
+                    }
+                }
+        }
+        .padding(16)
+        .background(themeManager.background)
+        .cornerRadius(12)
     }
     
     private func iconForMode(_ mode: ThemeManager.ThemeMode) -> String {

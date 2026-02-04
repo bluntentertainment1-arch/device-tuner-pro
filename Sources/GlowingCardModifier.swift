@@ -19,8 +19,8 @@ struct GlowingCardModifier: ViewModifier {
                     .stroke(
                         LinearGradient(
                             colors: [
-                                glowColor.opacity(0.3),
-                                glowColor.opacity(0.15)
+                                glowColor.opacity(themeManager.enableGlowEffects ? 0.3 : 0.1),
+                                glowColor.opacity(themeManager.enableGlowEffects ? 0.15 : 0.05)
                             ],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
@@ -28,7 +28,12 @@ struct GlowingCardModifier: ViewModifier {
                         lineWidth: 1
                     )
             )
-            .shadow(color: glowColor.opacity(0.15), radius: 8, x: 0, y: 4)
+            .shadow(
+                color: themeManager.enableGlowEffects ? glowColor.opacity(0.15) : Color.clear,
+                radius: themeManager.enableGlowEffects ? 8 : 0,
+                x: 0,
+                y: 4
+            )
     }
 }
 

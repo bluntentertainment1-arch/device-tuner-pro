@@ -5,6 +5,8 @@ class ThemeManager: ObservableObject {
     
     @Published var isDarkMode: Bool = false
     @Published var themeMode: ThemeMode = .system
+    @Published var enableSparklingStars: Bool = true
+    @Published var enableGlowEffects: Bool = true
     
     enum ThemeMode: String, CaseIterable {
         case light = "Light"
@@ -66,6 +68,18 @@ class ThemeManager: ObservableObject {
         }
     }
     
+    func toggleSparklingStars(_ enabled: Bool) {
+        enableSparklingStars = enabled
+        UserDefaults.standard.set(enabled, forKey: "enableSparklingStars")
+        objectWillChange.send()
+    }
+    
+    func toggleGlowEffects(_ enabled: Bool) {
+        enableGlowEffects = enabled
+        UserDefaults.standard.set(enabled, forKey: "enableGlowEffects")
+        objectWillChange.send()
+    }
+    
     private func saveThemePreference() {
         UserDefaults.standard.set(themeMode.rawValue, forKey: "themeMode")
         UserDefaults.standard.synchronize()
@@ -76,6 +90,9 @@ class ThemeManager: ObservableObject {
            let mode = ThemeMode(rawValue: savedMode) {
             themeMode = mode
         }
+        
+        enableSparklingStars = UserDefaults.standard.object(forKey: "enableSparklingStars") as? Bool ?? true
+        enableGlowEffects = UserDefaults.standard.object(forKey: "enableGlowEffects") as? Bool ?? true
     }
     
     var background: Color {
