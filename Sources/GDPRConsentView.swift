@@ -35,10 +35,7 @@ struct GDPRConsentView: View {
                     .background(
                         GeometryReader { geo in
                             Color.clear
-                                .preference(
-                                    key: ContentHeightKey.self,
-                                    value: geo.size.height
-                                )
+                                .preference(key: ContentHeightKey.self, value: geo.size.height)
                         }
                     )
                 }
@@ -46,10 +43,7 @@ struct GDPRConsentView: View {
                 .background(
                     GeometryReader { geo in
                         Color.clear
-                            .preference(
-                                key: VisibleHeightKey.self,
-                                value: geo.size.height
-                            )
+                            .preference(key: VisibleHeightKey.self, value: geo.size.height)
                     }
                 )
                 .onPreferenceChange(ContentHeightKey.self) { contentHeight = $0 }
@@ -199,13 +193,15 @@ struct GDPRConsentView: View {
     private func saveConsent(granted: Bool) {
         UserDefaults.standard.set(granted, forKey: "gdpr_consent_granted")
 
-        let config = GADMobileAds.sharedInstance().requestConfiguration
+        let config = GADMobileAds.sharedInstance.requestConfiguration
 
         if !granted {
-            config.maxAdContentRating = .general
+            config.maxAdContentRating = GADMaxAdContentRating.general
         }
 
-        GADMobileAds.sharedInstance().start(completionHandler: nil)
+        GADMobileAds.sharedInstance.start { _ in
+            // Optional: perform any action after initialization
+        }
     }
 
     private func checkScroll() {
