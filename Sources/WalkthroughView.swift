@@ -2,12 +2,13 @@ import SwiftUI
 
 struct WalkthroughView: View {
     @EnvironmentObject var themeManager: ThemeManager
+
     @AppStorage("hasSeenWalkthrough") private var hasSeenWalkthrough = false
     @AppStorage("hasAcceptedGDPR") private var hasAcceptedGDPR = false
+
     @State private var currentPage = 0
     @State private var showGDPRConsent = false
-    @State private var shouldCheckGDPR = true
-    
+
     private let walkthroughPages = [
         WalkthroughPage(
             title: "Clean Your Device",
@@ -25,96 +26,18 @@ struct WalkthroughView: View {
             icon: "battery.100.bolt"
         )
     ]
-    
+
     var body: some View {
         ZStack {
-            themeManager.background
-                .ignoresSafeArea()
-            
+            themeManager.background.ignoresSafeArea()
+
             VStack(spacing: 0) {
-                TabView(selection: $currentPage) {
-                    ForEach(0..<walkthroughPages.count, id: \.self) { index in
-                        WalkthroughPageView(page: walkthroughPages[index])
-                            .tag(index)
-                    }
-                }
-                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-                
-                VStack(spacing: 24) {
-                    HStack(spacing: 8) {
-                        ForEach(0..<walkthroughPages.count, id: \.self) { index in
-                            Circle()
-                                .fill(currentPage == index ? themeManager.accentColor : themeManager.borderColor)
-                                .frame(width: 8, height: 8)
-                                .animation(.easeInOut, value: currentPage)
-                        }
-                    }
-                    
-                    HStack(spacing: 16) {
-                        if currentPage > 0 {
-                            Button(action: {
-                                withAnimation {
-                                    currentPage -= 1
-                                }
-                            }) {
-                                Text("Previous")
-                                    .font(.system(size: 16, weight: .medium))
-                                    .foregroundColor(themeManager.secondaryText)
-                                    .frame(maxWidth: .infinity)
-                                    .frame(height: 50)
-                                    .background(themeManager.cardBackground)
-                                    .cornerRadius(12)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 12)
-                                            .stroke(themeManager.borderColor, lineWidth: 1)
-                                    )
-                            }
-                        }
-                        
-                        Button(action: {
-                            if currentPage < walkthroughPages.count - 1 {
-                                withAnimation {
-                                    currentPage += 1
-                                }
-                            } else {
-                                if isUKUser() && !hasAcceptedGDPR {
-                                    showGDPRConsent = true
-                                } else {
-                                    hasSeenWalkthrough = true
-                                }
-                            }
-                        }) {
-                            Text(currentPage < walkthroughPages.count - 1 ? "Next" : "Get Started")
-                                .font(.system(size: 16, weight: .semibold))
-                                .foregroundColor(themeManager.buttonText)
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 50)
-                                .background(themeManager.buttonBackground)
-                                .cornerRadius(12)
-                        }
-                    }
-                    .padding(.horizontal, 24)
-                    
-                    if currentPage < walkthroughPages.count - 1 {
-                        Button(action: {
-                            if isUKUser() && !hasAcceptedGDPR {
-                                showGDPRConsent = true
-                            } else {
-                                hasSeenWalkthrough = true
-                            }
-                        }) {
-                            Text("Skip")
-                                .font(.system(size: 14, weight: .medium))
-                                .foregroundColor(themeManager.secondaryText)
-                        }
-                        .padding(.top, 8)
-                    }
-                }
-                .padding(.bottom, 40)
+                walkthroughPagesView
+                controlsView
             }
-            
+
             SparklingStarsView()
-            
+
             if showGDPRConsent {
                 GDPRConsentView(
                     isPresented: $showGDPRConsent,
@@ -125,65 +48,92 @@ struct WalkthroughView: View {
                     },
                     onDecline: {
                         hasAcceptedGDPR = false
-                        exit(0)
+                        hasSeenWalkthrough = true
+                        // App continues with non-personalized ads
                     }
                 )
-                .transition(.opacity)
                 .zIndex(1000)
             }
         }
         .onAppear {
             themeManager.updateTheme()
-            
-            if shouldCheckGDPR && isUKUser() && !hasAcceptedGDPR {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    showGDPRConsent = true
-                    shouldCheckGDPR = false
-                }
+        }
+    }
+
+    // MARK: - Views
+
+    private var walkthroughPagesView: some View {
+        TabView(selection: $currentPage) {
+            ForEach(0..<walkthroughPages.count, id: \.self) { index in
+                WalkthroughPageView(page: walkthroughPages[index])
+                    .tag(index)
+            }
+        }
+        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+    }
+
+    private var controlsView: some View {
+        VStack(spacing: 24) {
+            pageIndicator
+            navigationButtons
+            skipButton
+        }
+        .padding(.bottom, 40)
+    }
+
+    private var pageIndicator: some View {
+        HStack(spacing: 8) {
+            ForEach(0..<walkthroughPages.count, id: \.self) { index in
+                Circle()
+                    .fill(currentPage == index ? themeManager.accentColor : themeManager.borderColor)
+                    .frame(width: 8, height: 8)
             }
         }
     }
-    
-    private func isUKUser() -> Bool {
-        let regionCode = Locale.current.region?.identifier ?? ""
-        return regionCode == "GB" || regionCode == "UK"
-    }
-}
 
-struct WalkthroughPage {
-    let title: String
-    let description: String
-    let icon: String
-}
-
-struct WalkthroughPageView: View {
-    @EnvironmentObject var themeManager: ThemeManager
-    let page: WalkthroughPage
-    
-    var body: some View {
-        VStack(spacing: 32) {
-            Spacer()
-            
-            Image(systemName: page.icon)
-                .font(.system(size: 100))
-                .foregroundColor(themeManager.accentColor)
-                .padding(.bottom, 20)
-            
-            VStack(spacing: 16) {
-                Text(page.title)
-                    .font(.system(size: 28, weight: .bold))
-                    .foregroundColor(themeManager.primaryText)
-                    .multilineTextAlignment(.center)
-                
-                Text(page.description)
-                    .font(.system(size: 16, weight: .regular))
-                    .foregroundColor(themeManager.secondaryText)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 40)
+    private var navigationButtons: some View {
+        HStack(spacing: 16) {
+            if currentPage > 0 {
+                Button("Previous") {
+                    withAnimation { currentPage -= 1 }
+                }
+                .secondaryButton(themeManager)
             }
-            
-            Spacer()
+
+            Button(currentPage < walkthroughPages.count - 1 ? "Next" : "Get Started") {
+                handleFinish()
+            }
+            .primaryButton(themeManager)
         }
         .padding(.horizontal, 24)
+    }
+
+    private var skipButton: some View {
+        Group {
+            if currentPage < walkthroughPages.count - 1 {
+                Button("Skip") {
+                    handleFinish()
+                }
+                .font(.system(size: 14, weight: .medium))
+                .foregroundColor(themeManager.secondaryText)
+                .padding(.top, 8)
+            }
+        }
+    }
+
+    // MARK: - Logic
+
+    private func handleFinish() {
+        if requiresGDPRConsent() && !hasAcceptedGDPR {
+            showGDPRConsent = true
+        } else {
+            hasSeenWalkthrough = true
+        }
+    }
+
+    private func requiresGDPRConsent() -> Bool {
+        guard let region = Locale.current.region?.identifier else { return false }
+        let gdprRegions = ["GB","UK","DE","FR","IT","ES","NL","BE","SE","FI","DK","NO","IE","AT","PL","PT","RO","CZ","HU","GR"]
+        return gdprRegions.contains(region)
     }
 }
