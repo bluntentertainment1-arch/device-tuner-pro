@@ -32,6 +32,7 @@
     111111111111111111111111 /* AdManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222222222222222222222222 /* AdManager.swift */; };
     333333333333333333333333 /* BannerAdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 444444444444444444444444 /* BannerAdView.swift */; };
     555555555555555555555555 /* RewardedAdBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 666666666666666666666666 /* RewardedAdBlockView.swift */; };
+    DDDD4444EEEE5555FFFF6666 /* GDPRConsentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDD4444EEEE5555FFFF7777 /* GDPRConsentView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -65,6 +66,7 @@
     222222222222222222222222 /* AdManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/AdManager.swift; sourceTree = "<group>"; };
     444444444444444444444444 /* BannerAdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BannerAdView.swift; sourceTree = "<group>"; };
     666666666666666666666666 /* RewardedAdBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/RewardedAdBlockView.swift; sourceTree = "<group>"; };
+    DDDD4444EEEE5555FFFF7777 /* GDPRConsentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GDPRConsentView.swift; path = Sources/GDPRConsentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
