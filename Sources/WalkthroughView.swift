@@ -1,5 +1,4 @@
 import SwiftUI
-import UserMessagingPlatform // ✅ Import for GDPR consent
 
 struct WalkthroughView: View {
     @EnvironmentObject var themeManager: ThemeManager
@@ -109,20 +108,18 @@ struct WalkthroughView: View {
         .onAppear {
             themeManager.updateTheme()
             
-            // ✅ GDPR consent called only once
+            // ✅ GDPR consent called only once via your existing ConsentManager
             if !consentHandled {
                 consentHandled = true
                 if let rootVC = UIApplication.shared.connectedScenes
                     .compactMap({ ($0 as? UIWindowScene)?.keyWindow })
                     .first?.rootViewController {
                     
+                    // Use your project’s ConsentManager from Sources
                     ConsentManager.shared.requestConsent(from: rootVC) {
                         print("✅ GDPR consent handled")
-                        // Optional: call your interstitial ad load here if you want
-                        // AdLoader.shared.loadInterstitialAd()
+                        // Optional: call your interstitial ad load here
                     }
-                } else {
-                    print("⚠️ Could not find rootViewController for ConsentManager")
                 }
             }
         }
