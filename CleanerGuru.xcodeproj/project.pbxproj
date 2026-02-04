@@ -67,7 +67,7 @@
     222222222222222222222222 /* AdManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/AdManager.swift; sourceTree = "<group>"; };
     444444444444444444444444 /* BannerAdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/BannerAdView.swift; sourceTree = "<group>"; };
     666666666666666666666666 /* RewardedAdBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/RewardedAdBlockView.swift; sourceTree = "<group>"; };
-    DDDD4444EEEE5555FFFF7777 /* GDPRConsentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GDPRConsentView.swift; sourceTree = "<group>"; };
+    DDDD4444EEEE5555FFFF7777 /* GDPRConsentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sources/GDPRConsentView.swift; sourceTree = "<group>"; };
 FPTSVIEW1234567890 /* FloatingParticlesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingParticlesView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
