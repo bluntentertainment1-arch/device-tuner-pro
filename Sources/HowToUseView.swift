@@ -1,11 +1,16 @@
 import SwiftUI
 
+// MARK: - HowToUseView
+
 struct HowToUseView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @Environment(\.dismiss) var dismiss
     @AppStorage("hasSeenWalkthrough") private var hasSeenWalkthrough = false
+    @AppStorage("hasAcceptedGDPR") private var hasAcceptedGDPR = false
     @State private var currentStep = 0
-    
+    @State private var showGDPRConsent = false
+    @State private var shouldCheckGDPR = true
+
     private let steps = [
         HowToUseStep(
             number: "1",
@@ -36,15 +41,15 @@ struct HowToUseView: View {
             color: Color(red: 0.6, green: 0.2, blue: 0.9)
         )
     ]
-    
+
     var body: some View {
         ZStack {
             themeManager.background
                 .ignoresSafeArea()
-            
+
             VStack(spacing: 0) {
                 headerView
-                
+
                 TabView(selection: $currentStep) {
                     ForEach(0..<steps.count, id: \.self) { index in
                         HowToUseStepView(step: steps[index], isOptionalStep: steps[index].number == "Optional")
@@ -52,7 +57,7 @@ struct HowToUseView: View {
                     }
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-                
+
                 VStack(spacing: 24) {
                     HStack(spacing: 8) {
                         ForEach(0..<steps.count, id: \.self) { index in
@@ -62,11 +67,11 @@ struct HowToUseView: View {
                                 .animation(.easeInOut, value: currentStep)
                         }
                     }
-                    
+
                     if currentStep == steps.count - 1 {
                         importantNoteCard
                     }
-                    
+
                     HStack(spacing: 16) {
                         if currentStep > 0 {
                             Button(action: {
@@ -87,15 +92,20 @@ struct HowToUseView: View {
                                     )
                             }
                         }
-                        
+
                         Button(action: {
                             if currentStep < steps.count - 1 {
                                 withAnimation {
                                     currentStep += 1
                                 }
                             } else {
-                                hasSeenWalkthrough = true
-                                dismiss()
+                                // ✅ GDPR check before finishing walkthrough
+                                if isEEAOrUKUser() && !hasAcceptedGDPR {
+                                    showGDPRConsent = true
+                                } else {
+                                    hasSeenWalkthrough = true
+                                    dismiss()
+                                }
                             }
                         }) {
                             Text(currentStep < steps.count - 1 ? "Next" : "Continue to Dashboard")
@@ -111,15 +121,42 @@ struct HowToUseView: View {
                 }
                 .padding(.bottom, 40)
             }
-            
+
             SparklingStarsView()
+
+            if showGDPRConsent {
+                GDPRConsentView(
+                    isPresented: $showGDPRConsent,
+                    onAccept: {
+                        hasAcceptedGDPR = true
+                        UserDefaults.standard.set(Date(), forKey: "gdprConsentDate")
+                        hasSeenWalkthrough = true
+                        dismiss()
+                    },
+                    onDecline: {
+                        hasAcceptedGDPR = false
+                        exit(0)
+                    }
+                )
+                .transition(.opacity)
+                .zIndex(1000)
+            }
         }
         .navigationBarHidden(true)
         .onAppear {
             themeManager.updateTheme()
+
+            if shouldCheckGDPR && isEEAOrUKUser() && !hasAcceptedGDPR {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    showGDPRConsent = true
+                    shouldCheckGDPR = false
+                }
+            }
         }
     }
-    
+
+    // MARK: - Header
+
     private var headerView: some View {
         VStack(spacing: 8) {
             HStack {
@@ -135,7 +172,7 @@ struct HowToUseView: View {
                 .padding(.trailing, 20)
                 .padding(.top, 16)
             }
-            
+
             Text("How to Use Device Tuner Pro 26")
                 .font(.system(size: 24, weight: .bold))
                 .foregroundColor(themeManager.primaryText)
@@ -144,21 +181,23 @@ struct HowToUseView: View {
                 .padding(.bottom, 16)
         }
     }
-    
+
+    // MARK: - Important Note Card
+
     private var importantNoteCard: some View {
         VStack(spacing: 12) {
             HStack {
                 Image(systemName: "info.circle.fill")
                     .font(.system(size: 16))
                     .foregroundColor(themeManager.accentColor)
-                
+
                 Text("Important Note")
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundColor(themeManager.primaryText)
-                
+
                 Spacer()
             }
-            
+
             Text("Device Tuner Pro 26 does not make automatic system changes.\n\nAll actions require user interaction and can be adjusted or reversed through system settings.")
                 .font(.system(size: 13, weight: .regular))
                 .foregroundColor(themeManager.secondaryText)
@@ -174,7 +213,19 @@ struct HowToUseView: View {
         )
         .padding(.horizontal, 24)
     }
+
+    // MARK: - EEA / UK detection
+
+    private func isEEAOrUKUser() -> Bool {
+        let eeaCountries = ["AT","BE","BG","HR","CY","CZ","DK","EE","FI","FR","DE",
+                            "GR","HU","IS","IE","IT","LV","LI","LT","LU","MT","NL",
+                            "NO","PL","PT","RO","SK","SI","ES","SE","GB"]
+        let region = Locale.current.region?.identifier ?? ""
+        return eeaCountries.contains(region)
+    }
 }
+
+// MARK: - HowToUseStep
 
 struct HowToUseStep {
     let number: String
@@ -184,17 +235,18 @@ struct HowToUseStep {
     let color: Color
 }
 
+// MARK: - HowToUseStepView
+
 struct HowToUseStepView: View {
     @EnvironmentObject var themeManager: ThemeManager
     let step: HowToUseStep
     let isOptionalStep: Bool
-    
+
     var body: some View {
         ScrollView {
             VStack(spacing: 32) {
-                Spacer()
-                    .frame(height: 20)
-                
+                Spacer().frame(height: 20)
+
                 ZStack {
                     Circle()
                         .fill(
@@ -205,15 +257,15 @@ struct HowToUseStepView: View {
                             )
                         )
                         .frame(width: 120, height: 120)
-                        .shadow(color: step.color.opacity(0.6), radius: 20, x: 0, y: 0)
-                        .shadow(color: step.color.opacity(0.3), radius: 30, x: 0, y: 0)
-                    
+                        .shadow(color: step.color.opacity(0.6), radius: 20)
+                        .shadow(color: step.color.opacity(0.3), radius: 30)
+
                     Image(systemName: step.icon)
                         .font(.system(size: 50))
                         .foregroundColor(.white)
                 }
                 .padding(.bottom, 20)
-                
+
                 VStack(spacing: 16) {
                     HStack {
                         Text("Step \(step.number)")
@@ -223,17 +275,17 @@ struct HowToUseStepView: View {
                             .padding(.vertical, 6)
                             .background(step.color.opacity(0.15))
                             .cornerRadius(20)
-                        
+
                         Spacer()
                     }
                     .padding(.horizontal, 40)
-                    
+
                     Text(step.title)
                         .font(.system(size: 26, weight: .bold))
                         .foregroundColor(themeManager.primaryText)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 40)
-                    
+
                     Text(step.description)
                         .font(.system(size: 16, weight: .regular))
                         .foregroundColor(themeManager.secondaryText)
@@ -242,7 +294,7 @@ struct HowToUseStepView: View {
                         .padding(.horizontal, 40)
                         .fixedSize(horizontal: false, vertical: true)
                 }
-                
+
                 Spacer()
             }
         }
