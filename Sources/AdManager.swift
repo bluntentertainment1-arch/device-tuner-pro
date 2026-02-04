@@ -39,7 +39,7 @@ class AdManager: NSObject, ObservableObject {
         rewardedAdFailureMessage = nil
         
         let request = Request()
-        RewardedAd.load(withAdUnitID: rewardedAdUnitID, request: request) { [weak self] ad, error in
+        RewardedAd.load(with: rewardedAdUnitID, request: request) { [weak self] ad, error in
             guard let self = self else { return }
             
             Task { @MainActor in
