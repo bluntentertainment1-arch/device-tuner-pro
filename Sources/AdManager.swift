@@ -131,7 +131,7 @@ class AdManager: NSObject, ObservableObject {
             return
         }
         
-        interstitialAd.present(fromRootViewController: rootViewController)
+        interstitialAd.present(from: rootViewController)
         #endif
     }
 }
