@@ -46,10 +46,8 @@ struct GDPRConsentView: View {
                             .preference(key: VisibleHeightKey.self, value: geo.size.height)
                     }
                 )
-                .onPreferenceChange(ContentHeightKey.self) { contentHeight = $0 }
-                .onPreferenceChange(VisibleHeightKey.self) { visibleHeight = $0 }
-                .onChange(of: contentHeight) { _ in checkScroll() }
-                .onChange(of: visibleHeight) { _ in checkScroll() }
+                .onPreferenceChange(ContentHeightKey.self) { contentHeight = $0; checkScroll() }
+                .onPreferenceChange(VisibleHeightKey.self) { visibleHeight = $0; checkScroll() }
 
                 buttonsView
             }
@@ -193,14 +191,14 @@ struct GDPRConsentView: View {
     private func saveConsent(granted: Bool) {
         UserDefaults.standard.set(granted, forKey: "gdpr_consent_granted")
 
-        let config = GADMobileAds.sharedInstance.requestConfiguration
-
+        // Mobile Ads SDK update
+        let config = MobileAds.shared.requestConfiguration
         if !granted {
-            config.maxAdContentRating = GADMaxAdContentRating.general
+            config.maxAdContentRating = .general
         }
 
-        GADMobileAds.sharedInstance.start { _ in
-            // Optional: perform any action after initialization
+        MobileAds.shared.start { _ in
+            // Optional: actions after initialization
         }
     }
 
