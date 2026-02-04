@@ -5,6 +5,7 @@ struct MainDashboardView: View {
     @EnvironmentObject var adManager: AdManager
     @StateObject private var viewModel = DashboardViewModel()
     @State private var showSettingsSheet = false
+    @State private var pulseAnimation = false
     @State private var showRefreshAnimation = false
     @State private var isStorageCleanupExpanded = false
     @State private var displayScore: Int = 0
@@ -21,18 +22,11 @@ struct MainDashboardView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                themeManager.background
-                    .ignoresSafeArea()
-                
-                FloatingParticlesView()
-                
-                if themeManager.enableSparklingStars {
-                    SparklingStarsView()
-                }
+                WorldMapPatternView()
                 
                 VStack(spacing: 0) {
                     ScrollView {
-                        LazyVStack(spacing: 20, pinnedViews: []) {
+                        VStack(spacing: 20) {
                             deviceHealthCard
                             
                             batteryStatusCard
@@ -41,7 +35,7 @@ struct MainDashboardView: View {
                             
                             storageCleanupCard
                             
-                            advancedToolsCard
+                            performanceModesCard
                             
                             disclaimerCard
                         }
@@ -49,12 +43,13 @@ struct MainDashboardView: View {
                         .padding(.top, 20)
                         .padding(.bottom, max(100, adManager.bannerViewHeight + 20))
                     }
-                    .scrollIndicators(.hidden)
                     
                     BannerAdView(adUnitID: adManager.bannerAdUnitID)
                         .frame(height: adManager.bannerViewHeight)
                         .background(themeManager.cardBackground)
                 }
+                
+                SparklingStarsView()
                 
                 ForEach(celebrationParticles) { particle in
                     CelebrationParticleView(particle: particle)
@@ -62,7 +57,7 @@ struct MainDashboardView: View {
                 
                 if showRewardedAdBlock {
                     RewardedAdBlockView(
-                        message: "Watch a short ad to unlock one extra refresh and update your device status!",
+                        message: "Watch a short ad to unlock one extra refresh and boost your device score!",
                         onAdWatched: {
                             showRewardedAdBlock = false
                             hasExtraRefresh = true
@@ -76,46 +71,29 @@ struct MainDashboardView: View {
                     .transition(.opacity)
                 }
             }
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    HStack {
-                        Spacer()
-                        Text("Device Tuner PRO 26")
-                            .font(.system(size: 18, weight: .bold))
-                            .foregroundColor(themeManager.navigationText)
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 8)
-                            .background(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .fill(themeManager.cardBackground)
-                                    .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
-                            )
-                        Spacer()
-                    }
+            .navigationBarTitle("", displayMode: .inline)
+            .navigationBarItems(
+                trailing: Button(action: {
+                    showSettingsSheet = true
+                }) {
+                    Image(systemName: "gearshape.fill")
+                        .foregroundColor(themeManager.navigationText)
                 }
-                
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        showSettingsSheet = true
-                    }) {
-                        Image(systemName: "gearshape.fill")
-                            .foregroundColor(themeManager.navigationText)
-                    }
-                }
-            }
-            .toolbarBackground(themeManager.cardBackground, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
+            )
             .sheet(isPresented: $showSettingsSheet) {
                 SettingsView()
             }
-            .task {
+            .onAppear {
                 themeManager.updateTheme()
                 viewModel.updateDeviceMetrics()
                 adManager.loadRewardedAd()
                 
                 if displayScore == 0 {
                     displayScore = viewModel.deviceHealth
+                }
+                
+                withAnimation(Animation.easeInOut(duration: 2.0).repeatForever(autoreverses: true)) {
+                    pulseAnimation = true
                 }
             }
             .onChange(of: viewModel.deviceHealth) { newValue in
@@ -139,19 +117,19 @@ struct MainDashboardView: View {
         isRotating = true
         circleRotation = 0
         
-        withAnimation(.easeInOut(duration: 1.0)) {
+        withAnimation(.easeInOut(duration: 1.5)) {
             circleRotation = 360
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
             circleRotation = 0
             isRotating = false
         }
     }
     
     private func animateScoreChange(from oldScore: Int, to newScore: Int) {
-        let duration = 1.0
-        let steps = 20
+        let duration = 2.0
+        let steps = 40
         let stepDuration = duration / Double(steps)
         let increment = Double(newScore - oldScore) / Double(steps)
         
@@ -162,13 +140,13 @@ struct MainDashboardView: View {
                 if step == steps {
                     displayScore = newScore
                     
-                    withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                    withAnimation(.spring(response: 0.6, dampingFraction: 0.6)) {
                         numberOpacity = 1.0
-                        numberScale = 1.1
+                        numberScale = 1.2
                     }
                     
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-                        withAnimation(.spring(response: 0.2, dampingFraction: 0.9)) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
                             numberScale = 1.0
                         }
                     }
@@ -184,20 +162,20 @@ struct MainDashboardView: View {
     private func createCelebrationParticles() {
         celebrationParticles.removeAll()
         
-        for _ in 0..<10 {
+        for _ in 0..<20 {
             let particle = CelebrationParticle(
                 position: CGPoint(x: UIScreen.main.bounds.width / 2, y: 200),
                 color: [themeManager.accentColor, themeManager.electricPink, themeManager.electricCyan, themeManager.neonGreen].randomElement()!,
-                size: CGFloat.random(in: 4...8),
+                size: CGFloat.random(in: 4...10),
                 velocity: CGPoint(
-                    x: CGFloat.random(in: -120...120),
-                    y: CGFloat.random(in: -150...(-40))
+                    x: CGFloat.random(in: -150...150),
+                    y: CGFloat.random(in: -200...(-50))
                 )
             )
             celebrationParticles.append(particle)
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             celebrationParticles.removeAll()
         }
     }
@@ -209,19 +187,19 @@ struct MainDashboardView: View {
         
         performCircleRotation()
         
-        withAnimation(.spring(response: 0.4, dampingFraction: 0.9)) {
+        withAnimation(.spring(response: 0.6, dampingFraction: 0.7)) {
             showRefreshAnimation = true
         }
         
         let oldScore = displayScore
         viewModel.refreshPerformance()
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             let newScore = viewModel.deviceHealth
             animateScoreChange(from: oldScore, to: newScore)
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
             withAnimation {
                 showRefreshAnimation = false
             }
@@ -256,18 +234,15 @@ struct MainDashboardView: View {
                     )
                     .frame(width: 150, height: 150)
                     .rotationEffect(.degrees(-90 + circleRotation))
-                    .animation(.easeInOut(duration: 0.3), value: displayScore)
-                    .shadow(
-                        color: themeManager.enableGlowEffects ? themeManager.accentColor.opacity(0.5) : Color.clear,
-                        radius: themeManager.enableGlowEffects ? 10 : 0,
-                        x: 0,
-                        y: 0
-                    )
+                    .shadow(color: themeManager.accentColor.opacity(0.8), radius: pulseAnimation ? 20 : 10, x: 0, y: 0)
+                    .shadow(color: themeManager.electricPink.opacity(0.6), radius: pulseAnimation ? 25 : 12, x: 0, y: 0)
+                    .animation(.easeInOut(duration: 0.5), value: displayScore)
                 
                 VStack(spacing: 4) {
                     Text("\(displayScore)%")
                         .font(.system(size: 36, weight: .bold))
                         .foregroundStyle(themeManager.electricGradient)
+                        .shadow(color: themeManager.accentColor.opacity(0.5), radius: 8, x: 0, y: 0)
                         .scaleEffect(numberScale)
                         .opacity(numberOpacity)
                         .id("score-\(displayScore)")
@@ -313,13 +288,19 @@ struct MainDashboardView: View {
                     themeManager.buttonBackground
                 )
                 .cornerRadius(12)
-                .scaleEffect(showRefreshAnimation ? 1.02 : 1.0)
                 .shadow(
-                    color: themeManager.enableGlowEffects ? (showRefreshAnimation ? themeManager.neonGreen.opacity(0.5) : themeManager.buttonBackground.opacity(0.3)) : Color.clear,
-                    radius: themeManager.enableGlowEffects ? 12 : 0,
+                    color: showRefreshAnimation ? themeManager.neonGreen.opacity(0.8) : themeManager.accentColor.opacity(0.8),
+                    radius: showRefreshAnimation ? 25 : 15,
                     x: 0,
                     y: 0
                 )
+                .shadow(
+                    color: showRefreshAnimation ? themeManager.neonGreen.opacity(0.5) : themeManager.accentColor.opacity(0.5),
+                    radius: showRefreshAnimation ? 35 : 20,
+                    x: 0,
+                    y: 0
+                )
+                .scaleEffect(showRefreshAnimation ? 1.05 : 1.0)
             }
             .disabled(showRefreshAnimation || isAnimatingScore)
         }
@@ -350,7 +331,7 @@ struct MainDashboardView: View {
                         )
                         .frame(width: 80, height: 80)
                         .rotationEffect(.degrees(-90))
-                        .animation(.easeInOut(duration: 0.5), value: viewModel.batteryLevel)
+                        .animation(.easeInOut(duration: 1.0), value: viewModel.batteryLevel)
                     
                     VStack(spacing: 2) {
                         Image(systemName: viewModel.isCharging ? "bolt.fill" : "battery.100")
@@ -417,7 +398,9 @@ struct MainDashboardView: View {
                         RoundedRectangle(cornerRadius: 8)
                             .fill(themeManager.neonGradient)
                             .frame(width: geometry.size.width * CGFloat(viewModel.storagePercentage) / 100, height: 8)
-                            .animation(.easeInOut(duration: 0.5), value: viewModel.storagePercentage)
+                            .animation(.easeInOut(duration: 1.0), value: viewModel.storagePercentage)
+                            .shadow(color: themeManager.electricCyan.opacity(0.8), radius: 10, x: 0, y: 0)
+                            .shadow(color: themeManager.neonPurple.opacity(0.6), radius: 15, x: 0, y: 0)
                     }
                 }
                 .frame(height: 8)
@@ -438,7 +421,7 @@ struct MainDashboardView: View {
     private var storageCleanupCard: some View {
         VStack(spacing: 12) {
             Button(action: {
-                withAnimation(.spring(response: 0.3, dampingFraction: 0.9)) {
+                withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
                     isStorageCleanupExpanded.toggle()
                 }
             }) {
@@ -481,12 +464,8 @@ struct MainDashboardView: View {
                 RoundedRectangle(cornerRadius: 10)
                     .fill(gradient)
                     .frame(width: 44, height: 44)
-                    .shadow(
-                        color: themeManager.enableGlowEffects ? themeManager.accentColor.opacity(0.4) : Color.clear,
-                        radius: themeManager.enableGlowEffects ? 8 : 0,
-                        x: 0,
-                        y: 0
-                    )
+                    .shadow(color: themeManager.accentColor.opacity(0.6), radius: 10, x: 0, y: 0)
+                    .shadow(color: themeManager.accentColor.opacity(0.3), radius: 15, x: 0, y: 0)
                 
                 Image(systemName: icon)
                     .font(.system(size: 24))
@@ -516,12 +495,13 @@ struct MainDashboardView: View {
             RoundedRectangle(cornerRadius: 12)
                 .stroke(themeManager.borderColor.opacity(0.5), lineWidth: 1)
         )
+        .shadow(color: themeManager.glowColor.opacity(0.3), radius: 8, x: 0, y: 0)
     }
     
-    private var advancedToolsCard: some View {
+    private var performanceModesCard: some View {
         VStack(spacing: 16) {
             HStack {
-                Text("Advanced Tools")
+                Text("Monitoring Modes")
                     .font(.system(size: 20, weight: .bold))
                     .foregroundColor(themeManager.primaryText)
                 Spacer()
@@ -529,9 +509,9 @@ struct MainDashboardView: View {
             
             VStack(spacing: 16) {
                 NavigationLink(destination: BatterySaverModeView()) {
-                    advancedToolRow(
+                    performanceModeRow(
                         icon: "battery.100.bolt",
-                        title: "Battery Saving",
+                        title: "Battery Monitoring",
                         description: "Track battery usage",
                         isActive: viewModel.isBatterySaverActive,
                         gradient: themeManager.energyGradient
@@ -539,7 +519,7 @@ struct MainDashboardView: View {
                 }
                 
                 NavigationLink(destination: GamingPerformanceModeView()) {
-                    advancedToolRow(
+                    performanceModeRow(
                         icon: "gamecontroller.fill",
                         title: "Gaming Mode",
                         description: "Monitor gaming activity",
@@ -591,12 +571,8 @@ struct MainDashboardView: View {
                     )
             }
         )
-        .shadow(
-            color: themeManager.enableGlowEffects ? themeManager.accentColor.opacity(0.15) : Color.clear,
-            radius: themeManager.enableGlowEffects ? 15 : 0,
-            x: 0,
-            y: 8
-        )
+        .shadow(color: themeManager.accentColor.opacity(0.2), radius: 20, x: 0, y: 10)
+        .shadow(color: themeManager.electricPink.opacity(0.15), radius: 30, x: 0, y: 15)
     }
     
     private var disclaimerCard: some View {
@@ -627,18 +603,14 @@ struct MainDashboardView: View {
         )
     }
     
-    private func advancedToolRow(icon: String, title: String, description: String, isActive: Bool, gradient: LinearGradient) -> some View {
+    private func performanceModeRow(icon: String, title: String, description: String, isActive: Bool, gradient: LinearGradient) -> some View {
         HStack(spacing: 16) {
             ZStack {
                 RoundedRectangle(cornerRadius: 12)
                     .fill(isActive ? gradient : LinearGradient(colors: [themeManager.borderColor.opacity(0.3)], startPoint: .leading, endPoint: .trailing))
                     .frame(width: 52, height: 52)
-                    .shadow(
-                        color: themeManager.enableGlowEffects && isActive ? themeManager.accentColor.opacity(0.5) : Color.clear,
-                        radius: themeManager.enableGlowEffects ? 10 : 0,
-                        x: 0,
-                        y: 0
-                    )
+                    .shadow(color: isActive ? themeManager.accentColor.opacity(0.5) : Color.clear, radius: 12, x: 0, y: 4)
+                    .shadow(color: isActive ? themeManager.accentColor.opacity(0.3) : Color.clear, radius: 18, x: 0, y: 6)
                 
                 Image(systemName: icon)
                     .font(.system(size: 26, weight: .semibold))
@@ -696,12 +668,7 @@ struct MainDashboardView: View {
                     )
             }
         )
-        .shadow(
-            color: themeManager.enableGlowEffects && isActive ? themeManager.glowColor.opacity(0.2) : Color.black.opacity(0.03),
-            radius: themeManager.enableGlowEffects && isActive ? 12 : 6,
-            x: 0,
-            y: isActive ? 6 : 3
-        )
+        .shadow(color: isActive ? themeManager.glowColor.opacity(0.3) : Color.black.opacity(0.05), radius: isActive ? 15 : 8, x: 0, y: isActive ? 8 : 4)
     }
 }
 
@@ -726,11 +693,12 @@ struct CelebrationParticleView: View {
             .position(x: particle.position.x + offset.x, y: particle.position.y + offset.y)
             .opacity(opacity)
             .scaleEffect(scale)
+            .shadow(color: particle.color.opacity(0.8), radius: 8, x: 0, y: 0)
             .onAppear {
-                withAnimation(.easeOut(duration: 1.2)) {
+                withAnimation(.easeOut(duration: 2.0)) {
                     offset = CGPoint(
                         x: particle.velocity.x,
-                        y: particle.velocity.y + 250
+                        y: particle.velocity.y + 300
                     )
                     opacity = 0
                     scale = 0.3
@@ -773,7 +741,7 @@ class DashboardViewModel: ObservableObject {
     }
     
     private func startStatusMonitoring() {
-        statusCheckTimer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true) { [weak self] _ in
+        statusCheckTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             self?.loadPerformanceModes()
         }
     }
@@ -785,7 +753,7 @@ class DashboardViewModel: ObservableObject {
     }
     
     func refreshPerformance() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.calculateDeviceHealth()
             self.calculateStorageUsage()
             self.updateBatteryStatus()
