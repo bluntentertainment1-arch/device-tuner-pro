@@ -107,22 +107,24 @@ struct WalkthroughView: View {
             SparklingStarsView()
         }
         .onAppear {
-    themeManager.updateTheme()
-    
-    // ✅ GDPR consent called only once
-    if !consentHandled {
-        consentHandled = true
-        if let rootVC = UIApplication.shared.connectedScenes
-            .compactMap({ ($0 as? UIWindowScene)?.keyWindow })
-            .first?.rootViewController {
+            themeManager.updateTheme()
             
-            ConsentManager.shared.requestConsent(from: rootVC) {
-                print("✅ GDPR consent handled")
-                // Optional: call your interstitial ad load here if you want
-                // AdLoader.shared.loadInterstitialAd()
+            // ✅ GDPR consent called only once
+            if !consentHandled {
+                consentHandled = true
+                if let rootVC = UIApplication.shared.connectedScenes
+                    .compactMap({ ($0 as? UIWindowScene)?.keyWindow })
+                    .first?.rootViewController {
+                    
+                    ConsentManager.shared.requestConsent(from: rootVC) {
+                        print("✅ GDPR consent handled")
+                        // Optional: call your interstitial ad load here if you want
+                        // AdLoader.shared.loadInterstitialAd()
+                    }
+                } else {
+                    print("⚠️ Could not find rootViewController for ConsentManager")
+                }
             }
-        } else {
-            print("⚠️ Could not find rootViewController for ConsentManager")
         }
     }
 }
