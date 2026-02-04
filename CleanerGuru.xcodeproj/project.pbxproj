@@ -33,6 +33,7 @@
     333333333333333333333333 /* BannerAdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 444444444444444444444444 /* BannerAdView.swift */; };
     555555555555555555555555 /* RewardedAdBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 666666666666666666666666 /* RewardedAdBlockView.swift */; };
     DDDD4444EEEE5555FFFF6666 /* GDPRConsentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDD4444EEEE5555FFFF7777 /* GDPRConsentView.swift */; };
+   FPTSVIEWBUILD1234567890 /* FloatingParticlesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FPTSVIEW1234567890 /* FloatingParticlesView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
