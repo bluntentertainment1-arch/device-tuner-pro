@@ -1,9 +1,11 @@
 import SwiftUI
+import UserMessagingPlatform // ✅ Import for GDPR consent
 
 struct WalkthroughView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @AppStorage("hasSeenWalkthrough") private var hasSeenWalkthrough = false
     @State private var currentPage = 0
+    @State private var consentHandled = false // Tracks if GDPR consent is done
     
     private let walkthroughPages = [
         WalkthroughPage(
@@ -106,6 +108,16 @@ struct WalkthroughView: View {
         }
         .onAppear {
             themeManager.updateTheme()
+            
+            // ✅ GDPR consent called only once
+            if !consentHandled {
+                consentHandled = true
+                ConsentManager.requestConsent(from: UIApplication.shared.windows.first?.rootViewController) {
+                    print("✅ GDPR consent handled")
+                    // Optional: call your interstitial ad load here if you want
+                    // Example: AdLoader.loadInterstitialAd()
+                }
+            }
         }
     }
 }
