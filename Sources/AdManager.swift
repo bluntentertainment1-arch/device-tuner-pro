@@ -14,9 +14,9 @@ class AdManager: NSObject, ObservableObject {
     @Published var showAdLoadingMessage = false
     @Published var rewardedAdFailureMessage: String? = nil
 
-    let bannerAdUnitID = "ca-app-pub-3940256099942544/2934735716"
-    private let rewardedAdUnitID = "ca-app-pub-3940256099942544/1712485313"
-    private let interstitialAdUnitID = "ca-app-pub-3940256099942544/4411468910"
+    let bannerAdUnitID = "ca-app-pub-1819215492028258/3482526881"
+    private let rewardedAdUnitID = "ca-app-pub-1819215492028258/1990509481"
+    private let interstitialAdUnitID = "ca-app-pub-1819215492028258/7613343585"
 
     private var rewardedAd: RewardedAd?
     private var interstitialAd: InterstitialAd?
