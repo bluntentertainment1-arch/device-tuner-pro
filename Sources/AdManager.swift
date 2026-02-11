@@ -100,8 +100,8 @@ class AdManager: NSObject, ObservableObject {
     
     func loadInterstitialAd() {
         #if canImport(GoogleMobileAds)
-        let request = GADRequest()
-        GADInterstitialAd.load(withAdUnitID: interstitialAdUnitID, request: request) { [weak self] ad, error in
+        let request = Request()
+        InterstitialAd.load(withAdUnitID: interstitialAdUnitID, request: request) { [weak self] ad, error in
             guard let self = self else { return }
             
             Task { @MainActor in
