@@ -20,8 +20,8 @@ class AdManager: NSObject, ObservableObject {
     private let interstitialAdUnitID = "ca-app-pub-1819215492028258/7613343585"
     
     #if canImport(GoogleMobileAds)
-    private var rewardedAd: GADRewardedAd?
-    private var interstitialAd: GADInterstitialAd?
+    private var rewardedAd: RewardedAd?
+    private var interstitialAd: InterstitialAd?
     #endif
     
     private var rewardedAdCompletion: ((Bool) -> Void)?
@@ -39,8 +39,8 @@ class AdManager: NSObject, ObservableObject {
         rewardedAdError = nil
         rewardedAdFailureMessage = nil
         
-        let request = GADRequest()
-        GADRewardedAd.load(withAdUnitID: rewardedAdUnitID, request: request) { [weak self] ad, error in
+        let request = Request()
+        RewardedAd.load(withAdUnitID: rewardedAdUnitID, request: request) { [weak self] ad, error in
             guard let self = self else { return }
             
             Task { @MainActor in
@@ -143,13 +143,13 @@ class AdManager: NSObject, ObservableObject {
 }
 
 #if canImport(GoogleMobileAds)
-extension AdManager: GADFullScreenContentDelegate {
-    nonisolated func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
+extension AdManager: FullScreenContentDelegate {
+    nonisolated func adDidDismissFullScreenContent(_ ad: FullScreenPresentingAd) {
         print("Ad dismissed")
         Task { @MainActor in
-            if ad is GADRewardedAd {
+            if ad is RewardedAd {
                 AdManager.shared.loadRewardedAd()
-            } else if ad is GADInterstitialAd {
+            } else if ad is InterstitialAd {
                 let callback = AdManager.shared.interstitialAdDismissCallback
                 AdManager.shared.interstitialAdDismissCallback = nil
                 AdManager.shared.loadInterstitialAd()
@@ -158,15 +158,15 @@ extension AdManager: GADFullScreenContentDelegate {
         }
     }
     
-    nonisolated func ad(_ ad: GADFullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
+    nonisolated func ad(_ ad: FullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
         print("Ad failed to present: \(error.localizedDescription)")
         Task { @MainActor in
-            if ad is GADRewardedAd {
+            if ad is RewardedAd {
                 AdManager.shared.rewardedAdFailureMessage = "Failed to display ad. Please try again later."
                 AdManager.shared.rewardedAdCompletion?(false)
                 AdManager.shared.rewardedAdCompletion = nil
                 AdManager.shared.loadRewardedAd()
-            } else if ad is GADInterstitialAd {
+            } else if ad is InterstitialAd {
                 let callback = AdManager.shared.interstitialAdDismissCallback
                 AdManager.shared.interstitialAdDismissCallback = nil
                 AdManager.shared.loadInterstitialAd()
