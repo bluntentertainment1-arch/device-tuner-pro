@@ -20,11 +20,12 @@ class AdManager: NSObject, ObservableObject {
     private let interstitialAdUnitID = "ca-app-pub-1819215492028258/7613343585"
     
     #if canImport(GoogleMobileAds)
-    private var rewardedAd: RewardedAd?
-    private var interstitialAd: InterstitialAd?
+    private var rewardedAd: GADRewardedAd?
+    private var interstitialAd: GADInterstitialAd?
     #endif
     
     private var rewardedAdCompletion: ((Bool) -> Void)?
+    private var interstitialAdDismissCallback: (() -> Void)?
     
     private override init() {
         super.init()
@@ -38,8 +39,8 @@ class AdManager: NSObject, ObservableObject {
         rewardedAdError = nil
         rewardedAdFailureMessage = nil
         
-        let request = Request()
-        RewardedAd.load(with: rewardedAdUnitID, request: request) { [weak self] ad, error in
+        let request = GADRequest()
+        GADRewardedAd.load(withAdUnitID: rewardedAdUnitID, request: request) { [weak self] ad, error in
             guard let self = self else { return }
             
             Task { @MainActor in
@@ -82,7 +83,7 @@ class AdManager: NSObject, ObservableObject {
         }
         
         rewardedAdCompletion = completion
-        rewardedAd.present(from: rootViewController) { [weak self] in
+        rewardedAd.present(fromRootViewController: rootViewController) { [weak self] in
             guard let self = self else { return }
             print("User earned reward")
             Task { @MainActor in
@@ -99,8 +100,8 @@ class AdManager: NSObject, ObservableObject {
     
     func loadInterstitialAd() {
         #if canImport(GoogleMobileAds)
-        let request = Request()
-       InterstitialAd.load(with: interstitialAdUnitID, request: request) { [weak self] ad, error in
+        let request = GADRequest()
+        GADInterstitialAd.load(withAdUnitID: interstitialAdUnitID, request: request) { [weak self] ad, error in
             guard let self = self else { return }
             
             Task { @MainActor in
@@ -117,48 +118,59 @@ class AdManager: NSObject, ObservableObject {
         #endif
     }
     
-    func showInterstitialAd() {
+    func showInterstitialAd(onDismiss: (() -> Void)? = nil) {
         #if canImport(GoogleMobileAds)
         guard let interstitialAd = interstitialAd else {
             print("Interstitial ad not ready")
             loadInterstitialAd()
+            onDismiss?()
             return
         }
         
         let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
         guard let rootViewController = windowScene?.windows.first?.rootViewController else {
             print("Root view controller not found")
+            onDismiss?()
             return
         }
         
-        interstitialAd.present(from: rootViewController)
+        interstitialAdDismissCallback = onDismiss
+        interstitialAd.present(fromRootViewController: rootViewController)
+        #else
+        onDismiss?()
         #endif
     }
 }
 
 #if canImport(GoogleMobileAds)
-extension AdManager: FullScreenContentDelegate {
-    nonisolated func adDidDismissFullScreenContent(_ ad: FullScreenPresentingAd) {
+extension AdManager: GADFullScreenContentDelegate {
+    nonisolated func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
         print("Ad dismissed")
         Task { @MainActor in
-            if ad is RewardedAd {
+            if ad is GADRewardedAd {
                 AdManager.shared.loadRewardedAd()
-            } else if ad is InterstitialAd {
+            } else if ad is GADInterstitialAd {
+                let callback = AdManager.shared.interstitialAdDismissCallback
+                AdManager.shared.interstitialAdDismissCallback = nil
                 AdManager.shared.loadInterstitialAd()
+                callback?()
             }
         }
     }
     
-    nonisolated func ad(_ ad: FullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
+    nonisolated func ad(_ ad: GADFullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
         print("Ad failed to present: \(error.localizedDescription)")
         Task { @MainActor in
-            if ad is RewardedAd {
+            if ad is GADRewardedAd {
                 AdManager.shared.rewardedAdFailureMessage = "Failed to display ad. Please try again later."
                 AdManager.shared.rewardedAdCompletion?(false)
                 AdManager.shared.rewardedAdCompletion = nil
                 AdManager.shared.loadRewardedAd()
-            } else if ad is InterstitialAd {
+            } else if ad is GADInterstitialAd {
+                let callback = AdManager.shared.interstitialAdDismissCallback
+                AdManager.shared.interstitialAdDismissCallback = nil
                 AdManager.shared.loadInterstitialAd()
+                callback?()
             }
         }
     }

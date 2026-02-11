@@ -281,10 +281,9 @@ struct GamingPerformanceModeView: View {
                 }
                 
                 Button(action: {
-                    adManager.showInterstitialAd()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    adManager.showInterstitialAd(onDismiss: {
                         viewModel.minimizeApp()
-                    }
+                    })
                 }) {
                     HStack(spacing: 12) {
                         Image(systemName: "house.fill")

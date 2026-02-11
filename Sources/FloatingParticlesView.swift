@@ -27,14 +27,14 @@ struct FloatingParticlesView: View {
     private func generateParticles(in size: CGSize) {
         var newParticles: [FloatingParticle] = []
         
-        for _ in 0..<30 {
+        for _ in 0..<15 {
             newParticles.append(FloatingParticle(
                 position: CGPoint(
                     x: CGFloat.random(in: 0...size.width),
                     y: CGFloat.random(in: 0...size.height)
                 ),
                 size: CGFloat.random(in: 2...4),
-                color: [themeManager.accentColor, themeManager.electricPink, themeManager.electricCyan, themeManager.neonPurple].randomElement()!.opacity(0.3),
+                color: [themeManager.accentColor, themeManager.electricPink, themeManager.electricCyan].randomElement()!.opacity(0.3),
                 opacity: Double.random(in: 0.2...0.5),
                 blur: CGFloat.random(in: 0.5...1.5),
                 velocity: CGPoint(
@@ -48,7 +48,7 @@ struct FloatingParticlesView: View {
     }
     
     private func startFloating(in size: CGSize) {
-        Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { _ in
+        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
             for index in particles.indices {
                 var particle = particles[index]
                 
@@ -66,8 +66,6 @@ struct FloatingParticlesView: View {
                 } else if particle.position.y > size.height + 10 {
                     particle.position.y = -10
                 }
-                
-                particle.opacity = Double.random(in: 0.2...0.5)
                 
                 particles[index] = particle
             }

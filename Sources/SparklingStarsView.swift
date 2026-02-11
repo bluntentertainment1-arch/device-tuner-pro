@@ -29,7 +29,7 @@ struct SparklingStarsView: View {
     private func generateStars(in size: CGSize) {
         var stars: [StarData] = []
         
-        for _ in 0..<6 {
+        for _ in 0..<4 {
             stars.append(StarData(
                 position: CGPoint(
                     x: CGFloat.random(in: 0...size.width * 0.2),
@@ -40,12 +40,11 @@ struct SparklingStarsView: View {
                 opacity: Double.random(in: 0.4...0.7),
                 rotation: Double.random(in: 0...360),
                 scale: Double.random(in: 0.6...1.0),
-                blur: CGFloat.random(in: 0...1.2),
-                glowRadius: CGFloat.random(in: 4...7)
+                blur: CGFloat.random(in: 0...1.2)
             ))
         }
         
-        for _ in 0..<6 {
+        for _ in 0..<4 {
             stars.append(StarData(
                 position: CGPoint(
                     x: CGFloat.random(in: size.width * 0.8...size.width),
@@ -56,12 +55,11 @@ struct SparklingStarsView: View {
                 opacity: Double.random(in: 0.4...0.7),
                 rotation: Double.random(in: 0...360),
                 scale: Double.random(in: 0.6...1.0),
-                blur: CGFloat.random(in: 0...1.2),
-                glowRadius: CGFloat.random(in: 4...7)
+                blur: CGFloat.random(in: 0...1.2)
             ))
         }
         
-        for _ in 0..<6 {
+        for _ in 0..<4 {
             stars.append(StarData(
                 position: CGPoint(
                     x: CGFloat.random(in: 0...size.width * 0.2),
@@ -72,12 +70,11 @@ struct SparklingStarsView: View {
                 opacity: Double.random(in: 0.4...0.7),
                 rotation: Double.random(in: 0...360),
                 scale: Double.random(in: 0.6...1.0),
-                blur: CGFloat.random(in: 0...1.2),
-                glowRadius: CGFloat.random(in: 4...7)
+                blur: CGFloat.random(in: 0...1.2)
             ))
         }
         
-        for _ in 0..<6 {
+        for _ in 0..<4 {
             stars.append(StarData(
                 position: CGPoint(
                     x: CGFloat.random(in: size.width * 0.8...size.width),
@@ -88,8 +85,7 @@ struct SparklingStarsView: View {
                 opacity: Double.random(in: 0.4...0.7),
                 rotation: Double.random(in: 0...360),
                 scale: Double.random(in: 0.6...1.0),
-                blur: CGFloat.random(in: 0...1.2),
-                glowRadius: CGFloat.random(in: 4...7)
+                blur: CGFloat.random(in: 0...1.2)
             ))
         }
         
@@ -99,7 +95,7 @@ struct SparklingStarsView: View {
     private func startTwinkling() {
         for index in animatingStars.indices {
             let delay = Double.random(in: 0...1.5)
-            let duration = Double.random(in: 2.0...3.5)
+            let duration = Double.random(in: 2.5...4.0)
             
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                 withAnimation(
@@ -150,5 +146,4 @@ struct StarData: Identifiable {
     var rotation: Double
     var scale: Double
     var blur: CGFloat
-    var glowRadius: CGFloat
 }

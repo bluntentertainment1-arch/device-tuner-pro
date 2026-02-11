@@ -39,10 +39,7 @@ struct StorageDetailView: View {
             
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
-                    adManager.showInterstitialAd()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        dismiss()
-                    }
+                    dismiss()
                 }) {
                     HStack(spacing: 4) {
                         Image(systemName: "chevron.left")
