@@ -36,8 +36,7 @@
 		<string>armv7</string>
 	</array>
 
-<key>NSUserTrackingUsageDescription</key>
-<string>This helps us show relevant ads and keep the app free.</string>
+
 
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
