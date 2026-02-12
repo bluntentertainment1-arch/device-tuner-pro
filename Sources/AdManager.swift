@@ -40,7 +40,9 @@ class AdManager: NSObject, ObservableObject {
         rewardedAdFailureMessage = nil
         
         let request = Request()
-        RewardedAd.load(withAdUnitID: rewardedAdUnitID, request: request) { [weak self] ad, error in
+        
+        // ✅ FIXED HERE
+        RewardedAd.load(with: rewardedAdUnitID, request: request) { [weak self] ad, error in
             guard let self = self else { return }
             
             Task { @MainActor in
@@ -83,7 +85,9 @@ class AdManager: NSObject, ObservableObject {
         }
         
         rewardedAdCompletion = completion
-        rewardedAd.present(fromRootViewController: rootViewController) { [weak self] in
+        
+        // ✅ FIXED HERE
+        rewardedAd.present(from: rootViewController) { [weak self] in
             guard let self = self else { return }
             print("User earned reward")
             Task { @MainActor in
@@ -101,7 +105,9 @@ class AdManager: NSObject, ObservableObject {
     func loadInterstitialAd() {
         #if canImport(GoogleMobileAds)
         let request = Request()
-        InterstitialAd.load(withAdUnitID: interstitialAdUnitID, request: request) { [weak self] ad, error in
+        
+        // ✅ FIXED HERE
+        InterstitialAd.load(with: interstitialAdUnitID, request: request) { [weak self] ad, error in
             guard let self = self else { return }
             
             Task { @MainActor in
@@ -135,7 +141,9 @@ class AdManager: NSObject, ObservableObject {
         }
         
         interstitialAdDismissCallback = onDismiss
-        interstitialAd.present(fromRootViewController: rootViewController)
+        
+        // ✅ FIXED HERE
+        interstitialAd.present(from: rootViewController)
         #else
         onDismiss?()
         #endif
@@ -144,6 +152,7 @@ class AdManager: NSObject, ObservableObject {
 
 #if canImport(GoogleMobileAds)
 extension AdManager: FullScreenContentDelegate {
+    
     nonisolated func adDidDismissFullScreenContent(_ ad: FullScreenPresentingAd) {
         print("Ad dismissed")
         Task { @MainActor in
