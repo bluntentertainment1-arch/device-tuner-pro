@@ -104,10 +104,6 @@ struct PhotoLibraryCleanupView: View {
                     showPermissionAlert = true
                 }
             }
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                adManager.showInterstitialAd()
-            }
         }
     }
     
